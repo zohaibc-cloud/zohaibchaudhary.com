@@ -22,6 +22,7 @@
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <title>Zohaib Chaudhary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -665,6 +666,20 @@ html.vlock,html.vlock body{overflow:hidden}
 /* the opening waits for the portrait and the fonts, then everything appears together */
 html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #opening > *,html:not(.heroready) #nib,html:not(.heroready) #chapters,html:not(.heroready) #vnib{opacity:0!important}
 .vhero > *,#opening > *,#nib,#chapters{transition:opacity .6s ease-out}
+
+/* porthole: the thread rings the photo like a ship's window; colour washes in from the knot as the ring closes */
+.vframe.vport{position:relative;align-self:center;width:min(74vw,300px);aspect-ratio:1;max-width:none;padding:0;border:0;border-radius:50%;box-shadow:inset 0 0 0 10px var(--sfg),0 10px 26px rgba(0,0,0,.28)}
+.vport img{position:absolute;inset:10px;width:calc(100% - 20px);height:calc(100% - 20px);border-radius:50%;object-fit:cover;object-position:62% 40%}
+.vport img:first-child{filter:grayscale(1) contrast(1.08)}
+.vport .vcol{clip-path:circle(0% at 0% 50%);transition:clip-path 1.6s cubic-bezier(.65,0,.25,1)}
+.vport.lit .vcol{clip-path:circle(150% at 0% 50%)}
+.vport .bolt{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:
+  radial-gradient(circle,var(--sbg) 0 2.6px,transparent 3px) 50% 1.5%/100% 100% no-repeat,radial-gradient(circle,var(--sbg) 0 2.6px,transparent 3px) 50% 98.5%/100% 100% no-repeat,
+  radial-gradient(circle,var(--sbg) 0 2.6px,transparent 3px) 98.5% 50%/100% 100% no-repeat,radial-gradient(circle,var(--sbg) 0 2.6px,transparent 3px) 1.5% 50%/100% 100% no-repeat}
+@media (prefers-reduced-motion: reduce){.vport .vcol{clip-path:none;transition:none}}
+
+#im-photo-c{clip-path:circle(0% at 0% 50%);transition:clip-path 1.6s cubic-bezier(.65,0,.25,1)}
+#im-photo-c.lit{clip-path:circle(150% at 0% 50%)}
 </style>
 
 <div class="progress" id="progress"></div>
@@ -732,7 +747,13 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
           <image id="im-toronto_photo" href="img/toronto_photo.jpg" x="4742" y="28" width="240" height="260" preserveAspectRatio="xMidYMin slice"/>
           <text x="4862" y="316" text-anchor="middle" style="font-family:var(--f-mono);font-size:14px;letter-spacing:.14em;fill:#0A090B">TORONTO · HOME</text>
         </g></g>
-        <image class="rev pop" data-a="7700" data-b="8050" data-s="0.7" id="im-photo" href="img/photo.webp" x="7950" y="128" width="450" height="337"/>
+        <g class="rev pop" data-a="7700" data-b="8050" data-s="0.7" id="dport">
+          <clipPath id="cp-port"><circle cx="8175" cy="296" r="172"/></clipPath>
+          <filter id="f-bw"><feColorMatrix type="saturate" values="0"/></filter>
+          <circle cx="8175" cy="296" r="180" class="fill-fg"/>
+          <g clip-path="url(#cp-port)"><image id="im-photo" href="img/sail_wide.jpg" x="7955" y="131" width="440" height="330" filter="url(#f-bw)" preserveAspectRatio="xMidYMid slice"/>
+          <image id="im-photo-c" href="img/sail_wide.jpg" x="7955" y="131" width="440" height="330" preserveAspectRatio="xMidYMid slice"/></g>
+        </g>
 
         <g id="gallery"></g>
         <circle id="glow2" cx="16350" cy="250" r="220" fill="url(#glow)" opacity="0"/>
@@ -966,7 +987,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
 
   <section data-route="drives" class="vs" style="--sbg:#EE1C25;--sfg:#0A090B;--sacc:#FCDF03">
     <div class="vplate rv"><span class="vnum"><b>V</b>What Drives Me</span><span class="vur" lang="ur">تجسس</span><h2 class="vh">Curiosity and connection.</h2></div>
-    <div class="vframe rv"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-photo" alt="Black and white portrait of Zohaib, hand to his chin"></div>
+    <div class="vframe vport rv" data-lit><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-photo" alt="Zohaib at the helm of a sailboat, smiling in a cap and sunglasses"><img class="vcol" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-photo" alt="" aria-hidden="true"></div>
     <p class="vp rv">I'm curious about people,</p>
     <ul class="vcur" aria-label="how they think, what they hope for and what holds them back">
       <li class="rv c1">how they <b class="vthink">think,</b></li>
@@ -1125,8 +1146,11 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
   L([[5110,470],[5124,452],[5138,470],[5170,470],[5182,355],[5198,560],[5212,470],[5320,470],[5334,454],[5348,470],[5378,470],[5390,345],[5406,575],[5420,470],[5520,470]]);
   S([[5600,370],[5700,510],[5800,360],[5900,540],[6000,380],[6100,520],[6200,400],[6320,540],[6440,510],[6560,520],[6700,490],[6950,470]]);
   L([[7450,470]]);
-  S([[7560,500],[7700,530],[7860,520],[7932,492]]);
-  L([[7932,108],[8418,108],[8418,492]]);
+  // porthole: the thread rings the sailing photo, ties a small knot on the left, then carries on
+  S([[7560,500],[7700,530],[7840,500],[7955,400],[7983,296]]);
+  {const cx=8175,cy=296,r=192,ring=[];for(let k=1;k<=56;k++){const a=Math.PI+k/56*Math.PI*2;ring.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);}S(ring);
+   const kx=7972,ky=306,kn=[];for(let k=0;k<=14;k++){const a=-Math.PI/2+k/14*Math.PI*2.2;kn.push([kx+Math.cos(a)*14,ky+Math.sin(a)*14]);}S(kn);}
+  S([[7990,430],[8080,515],[8300,528]]);
   S([[8500,530],[8700,525],[8950,512],[9200,520]]);
   const dBefore=d.length, curBefore=cur;
   raw=true; S([[9420,545],[9700,550],[9860,470],[9940,345],[10060,325],[10200,340],[10340,320],[10480,342],[10620,320],[10760,342],[10900,320],[11040,330],[11100,352],[11160,452],[11190,548],[11250,588],[11340,594],[11500,596],[11590,470],[11640,330],[11780,305],[11920,330],[12060,305],[12200,330],[12340,305],[12480,330],[12620,305],[12760,325],[12840,440],[12900,560],[13050,585],[13350,590],[13650,584],[13950,592],[14250,586],[14520,590],[14680,565]]); const dEnd=d.length; raw=false;   // the travels, then off the clock
@@ -1135,6 +1159,8 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
   L([[13050,510],[13050,480],[13170,480],[13170,450],[13290,450],[13290,420],[13410,420],[13410,390],[13530,390],[13530,360],[13650,360]]);
   S([[13800,380],[14100,450],[14450,560],[14800,592],[15150,575],[15380,400],[15620,130]]);
   thread.setAttribute("d",d);
+  // where along the line the porthole knot is tied (colour arrives there)
+  const PORT_KNOT=(()=>{const L=thread.getTotalLength();let best=1e9,at=0;for(let l=0;l<L;l+=6){const q=thread.getPointAtLength(l);if(q.x<7900||q.x>8100)continue;const dd=Math.hypot(q.x-7972,q.y-320);if(dd<best){best=dd;at=l;}}return at;})();
   document.getElementById("contrail").setAttribute("d","M"+f(curBefore)+d.slice(dBefore,dEnd));
 
   /* ---------- line art ---------- */
@@ -1195,7 +1221,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
 
   /* ---------- snapshots ---------- */
   const SNAP=[["img/p_ride.jpg","200 km. Conquered.","Ride to Conquer Cancer"],["img/p_jet.jpg","In the GCAP cockpit","Farnborough Airshow 2026"],["img/p_throne.jpg","A throne of plates","and bars"],["img/p_ronnie.jpg","With Ronnie Coleman","8× Mr. Olympia"],
-    ["img/p_jay.jpg","With Jay Cutler","4× Mr. Olympia"],["img/p_sail.jpg","Under sail",""],["img/p_bw.jpg","Bundeswehr display","Germany"]];
+    ["img/p_jay.jpg","With Jay Cutler","4× Mr. Olympia"],["img/p_bw.jpg","Bundeswehr display","Germany"]];
   const galleryG=$("gallery");
   SNAP.forEach(([src,l1,l2],i)=>{
     const x=12975+i*238, y=i%2?96:30, rot=[-2,2.5,-2.5,2,-1.5,2.5,-2][i];
@@ -1404,6 +1430,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
     const ang=Math.atan2(p.y-q.y,p.x-q.x)*180/Math.PI;
     nib.setAttribute("transform",`translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${(ang*0.25-28).toFixed(1)})`);
     const flying=tip>9500&&tip<11125&&!reduce;
+    {const pc=document.getElementById("im-photo-c"); if(pc){const on=reduce||Ln>=PORT_KNOT; if(pc._on!==on){pc.classList.toggle("lit",on);pc._on=on;}}}
     nib.style.opacity=flying?0:1;
     plane.style.opacity=flying?1:0;
     if(flying) plane.setAttribute("transform",`translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${ang.toFixed(1)}) scale(1.35)`);
@@ -1531,7 +1558,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
     const f=document.createElement("figure"); f.className="vprint"; f.style.setProperty("--r",[-2,2.5,-2.5,2,-1.5,2.5,-2][i%7]+"deg");
     f.innerHTML=`<img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="><figcaption><b></b>${l2?"<i></i>":""}</figcaption>`;
     f.querySelector("img").src=src; f.querySelector("img").alt=l1; f.querySelector("b").textContent=l1; if(l2) f.querySelector("i").textContent=l2;
-    (i<4?rowA:rowB).appendChild(f);
+    (i<3?rowA:rowB).appendChild(f);
   });
 
   /* ---------- headlines rise word by word ---------- */
@@ -1610,7 +1637,10 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
     if(n==="family"){const qt=R(q(".vquote")),hx=W*.58,hy=Math.min(H-60,qt.b+52),hs=22;G(qt.b+14);
       const hp=[];for(let k=0;k<=40;k++){const t=Math.PI+k/40*Math.PI*2;hp.push([hx+hs*16*Math.pow(Math.sin(t),3)/16,hy-hs*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/16]);}
       S([[W*.3,qt.b+26],hp[0]]);L(hp.slice(1));S([[W*.35,hy+30],[X0,hy+42]]);G(H-1);}
-    if(n==="drives"){const fr=R(q(".vframe")),o=8;G(fr.t-16);L([[fr.l-o,fr.t-o],[fr.r+o,fr.t-o],[fr.r+o,fr.b+o],[fr.l-o,fr.b+o],[fr.l-o,fr.t+fr.h*.3]]);S([[X0+4,fr.b+o+6],[X0,fr.b+20]]);
+    if(n==="drives"){const fr=R(q(".vframe")),cx=fr.cx,cy=fr.cy,r=fr.w/2+9;G(cy-r*.5);S([[X0+6,cy-6],[cx-r-14,cy-2],[cx-r,cy]]);
+      const ring=[];for(let k=1;k<=48;k++){const a=Math.PI+k/48*Math.PI*2;ring.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);}S(ring);
+      const kx=cx-r-7,ky=cy+5,kn=[];for(let k=0;k<=14;k++){const a=-Math.PI/2+k/14*Math.PI*2.2;kn.push([kx+Math.cos(a)*8,ky+Math.sin(a)*8]);}S(kn);s.knot=[kx,ky+8];
+      S([[X0+4,ky+30],[X0,Math.max(ky+60,fr.b-10)],[X0,fr.b+20]]);
       // three curiosities, each drawn by the thread: a thought spiral, a rising star, a lasso that tugs "back"
       const rr=el=>{const g=document.createRange();g.selectNodeContents(el);const b=g.getBoundingClientRect();return {l:b.left-sr.left,r:b.right-sr.left,t:b.top-sr.top,b:b.bottom-sr.top,cy:(b.top+b.bottom)/2-sr.top};};
       const th=rr(q(".vthink")),hp=rr(q(".vhope")),bk=rr(q(".vback"));
@@ -1710,7 +1740,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
       const N=Math.max(200,Math.round(s.L/6)); s.samp=[]; s.cum=[0]; let prev=null;
       for(let k=0;k<=N;k++){const l=s.L*k/N,p=s.path.getPointAtLength(l);s.samp.push([l,p.x,p.y]);if(prev){const dx=p.x-prev.x,dy=p.y-prev.y,jump=Math.hypot(dx,dy)>30;s.cum.push(s.cum[s.cum.length-1]+(jump?0:Math.abs(dy)+Math.abs(dx)*0.45));}prev=p;}
       s.tot=s.cum[s.cum.length-1]||1;
-      s.marks=[...s.sec.querySelectorAll("[data-lit]")].map(el=>{const b=el.getBoundingClientRect();const y=b.top-s.sec.getBoundingClientRect().top+b.height*(parseFloat(el.dataset.litAt)||.3);let ix=s.samp.findIndex(q=>q[2]>=y-6);if(ix<0)ix=s.samp.length-1;return {el,y,ix};});
+      s.marks=[...s.sec.querySelectorAll("[data-lit]")].map(el=>{const b=el.getBoundingClientRect();const y=b.top-s.sec.getBoundingClientRect().top+b.height*(parseFloat(el.dataset.litAt)||.3);let ix=s.samp.findIndex(q=>q[2]>=y-6);if(ix<0)ix=s.samp.length-1;if(s.knot&&el.classList.contains("vport")){let best=1e9;s.samp.forEach((q,k)=>{const dd=Math.hypot(q[1]-s.knot[0],q[2]-s.knot[1]);if(k>s.samp.length*0.08&&dd<best){best=dd;ix=k;}});}return {el,y,ix};});
     });
     revealEls.forEach(el=>{const r=el.getBoundingClientRect(); el._t=r.top+window.scrollY; el._h=r.height;});
     root.classList.remove("vmeasure");
