@@ -966,7 +966,7 @@ html.vlock,html.vlock body{overflow:hidden}
 
   <section data-route="travels" class="vs" style="--sbg:#FCDF03;--sfg:#0A090B;--sacc:#EE1C25">
     <div class="vplate rv"><span class="vnum"><b>VI</b>Travels</span><span class="vur" lang="ur">سیاحت</span><h2 class="vh">Where the thread has taken me.</h2></div>
-    <div class="vtally rv" id="vtally"><span><b data-n="13">0</b> places</span><span><b data-n="3">0</b> continents</span></div>
+    <div class="vtally rv" id="vtally"><span><b data-n="14">0</b> places</span><span><b data-n="3">0</b> continents</span></div>
     <div class="vstampwrap"><div class="vstamps" id="vstamps"></div><svg class="vplane" viewBox="-40 -36 80 72" aria-hidden="true"><path d="M36,0 Q33,-4.5 24,-4.5 L6,-4.5 L-9,-33 L-17,-33 L-7,-4.5 L-24,-4.5 L-31,-14 L-36,-14 L-32,-3 L-32,3 L-36,14 L-31,14 L-24,4.5 L-7,4.5 L-17,33 L-9,33 L6,4.5 L24,4.5 Q33,4.5 36,0 Z"/></svg></div>
     <p class="vp rv">Every border crossed is another language, another table, another way of seeing.</p>
   </section>
@@ -1192,13 +1192,13 @@ html.vlock,html.vlock body{overflow:hidden}
 
   /* ---------- travel stamps ---------- */
   const PLACES=[
-    ["Canada","Bonjour · Hello","NA",P.red,"circle"],["United States","Hello","NA",P.blue,"rect"],["The Caribbean","Hola · Bonjou","NA",P.ink,"oval"],
+    ["Canada","Bonjour · Hello","NA",P.red,"circle"],["United States","Hello","NA",P.blue,"rect"],["The Caribbean","Hola · Bonjou","NA",P.ink,"oval"],["Mexico","Hola","NA",P.red,"circle"],
     ["United Kingdom","Cheers","EU",P.red,"oct"],["France","Bonjour","EU",P.blue,"circle"],["Belgium","Goeiedag","EU",P.ink,"rect"],
     ["Netherlands","Hallo","EU",P.red,"oval"],["Germany","Guten Tag","EU",P.blue,"oct"],["Switzerland","Grüezi","EU",P.ink,"circle"],
     ["Spain","Hola","EU",P.red,"rect"],["Pakistan","السلام علیکم","AS",P.red,"home"],["Vietnam","Xin chào","AS",P.blue,"oval"],["Hong Kong","你好","AS",P.ink,"oct"]];
   const stamps=[];
   PLACES.forEach(([name,greet,cont,col,shape],i)=>{
-    const cx=9990+i*88, cy=i%2?470:185, rot=((i*37)%17)-8;
+    const cx=9990+i*81, cy=i%2?470:185, rot=((i*37)%17)-8;
     const g=document.createElementNS(NS,"g");g.setAttribute("class","stamp");g.style.opacity=0;artG.appendChild(g);
     const add=(tag,at)=>{const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);g.appendChild(e);return e;};
     const st={fill:"none",stroke:col,"stroke-width":3};
@@ -1220,7 +1220,7 @@ html.vlock,html.vlock body{overflow:hidden}
   function runTally(now){
     if(!tally.started) return;
     const t=reduce?1:Math.min(1,(now-tally.t0)/1600), e=1-Math.pow(1-t,3);
-    cPlaces.textContent=Math.round(13*e); cConts.textContent=Math.round(3*Math.min(1,e*1.15));
+    cPlaces.textContent=Math.round(14*e); cConts.textContent=Math.round(3*Math.min(1,e*1.15));
     if(t<1) requestAnimationFrame(runTally);
   }
 
