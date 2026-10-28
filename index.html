@@ -1384,7 +1384,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
   }
   (function(){
     const btn=$("connect"), reply=$("reply"), q1=$("q1"), q2=$("q2"), mailRow=$("mailRow"), copyBtn=$("copyMail"), addr=$("addr");
-    const lines=["Ha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
+    const lines=["Bahaha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
     let played=false;
     const type=(el,txt,ms)=>new Promise(res=>{if(reduce){el.textContent=txt;return res();}let i=0;const t=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length){clearInterval(t);res();}},ms);});
     const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
@@ -1909,7 +1909,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
     Promise.all([imgReady,fontReady]).then(show); setTimeout(show,2500); }
   /* ---------- let's connect ---------- */
   const btn=$("vconnect"), reply=$("vreply"), q1=$("vq1"), q2=$("vq2"), mailRow=$("vmailRow"), copyBtn=$("vcopy"), addr=$("vaddr");
-  const lines=["Ha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
+  const lines=["Bahaha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
   let played=false;
   const type=(el,txt,ms)=>new Promise(res=>{if(reduce){el.textContent=txt;return res();}let i=0;const t=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length){clearInterval(t);res();}},ms);});
   const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
