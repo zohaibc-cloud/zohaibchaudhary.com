@@ -640,6 +640,13 @@ html.vlock,html.vlock body{overflow:hidden}
 .dcur.in .dhope{color:var(--yellow);transform:translateY(-.15em);text-shadow:0 0 18px rgba(252,223,3,.7)}
 .dcur.in .dback{animation:vtug 2.8s 1.8s cubic-bezier(.3,1.5,.5,1) infinite}
 @media (prefers-reduced-motion: reduce){.dcur li{opacity:1;transform:none}.dcur .dm path{stroke-dashoffset:0}.dthink,.dback{animation:none!important}}
+
+/* never show empty image boxes or tap outlines while the page wakes up */
+.vstory img{border:0;outline:0}
+.vstory img[src^="data:image/gif"]{visibility:hidden}
+.vstory button,.vstory a{-webkit-tap-highlight-color:transparent}
+.vvow .tr{animation-name:trackm}
+@keyframes trackm{from{letter-spacing:.1em;opacity:0;filter:blur(4px)}}
 </style>
 
 <div class="progress" id="progress"></div>
@@ -862,7 +869,7 @@ html.vlock,html.vlock body{overflow:hidden}
       <span class="vkick">Lahore · Montréal · Toronto</span>
       <p class="vowline vvow"><span class="lead">Elevating people</span> by becoming a <span class="lan"><svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2,6.5 C28,3 64,8.5 98,4.5" pathLength="1" vector-effect="non-scaling-stroke"/></svg>steady lantern</span> in their moments of <span class="tr">transition</span>.</p>
     </div>
-    <div class="vfig"><div class="vsun"></div><img id="vportrait" alt="Illustrated portrait of Zohaib in a dark suit, his name brushed across it in red Urdu script"></div>
+    <div class="vfig"><div class="vsun"></div><img id="vportrait" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="Illustrated portrait of Zohaib in a dark suit, his name brushed across it in red Urdu script"></div>
     <svg class="vtangle" id="vtangle" aria-hidden="true"><path/></svg>
     <h1 class="vname"><span>Zohaib</span><span>Chaudhary</span></h1>
     <span class="vswipe">Swipe up to begin <i></i></span>
@@ -870,14 +877,14 @@ html.vlock,html.vlock body{overflow:hidden}
 
   <section data-route="spark" class="vs" style="--sbg:#FCDF03;--sfg:#0A090B;--sacc:#EE1C25">
     <div class="vplate rv"><span class="vnum"><b>I</b>The Spark</span><span class="vur" lang="ur">چنگاری</span><h2 class="vh">Every one of us is born with a spark.</h2></div>
-    <div class="vart rv vbulb" data-lit><span class="vglow"></span><img data-src="im-bulb" alt="A light bulb, lit"></div>
+    <div class="vart rv vbulb" data-lit><span class="vglow"></span><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-bulb" alt="A light bulb, lit"></div>
     <p class="vb rv">It isn't ambition or a number on a scorecard. It's curiosity, imagination and resilience.</p>
     <p class="vp rv">That little spark is hidden in all of us.</p>
   </section>
 
   <section data-route="edges" class="vs" style="--sbg:#F3F3F3;--sfg:#0A090B;--sacc:#EE1C25">
     <div class="vplate rv"><span class="vnum"><b>II</b>The Edges of Growth</span><span class="vur" lang="ur">سفر</span><h2 class="vh"><span class="y">Resilience.</span> <span class="r">Movement.</span> <span class="b">Belonging.</span></h2></div>
-    <div class="vart rv vhandsun"><span class="vredsun"></span><div class="vhandwrap"><img data-src="im-hand" alt=""><span class="vdot"></span></div></div>
+    <div class="vart rv vhandsun"><span class="vredsun"></span><div class="vhandwrap"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-hand" alt=""><span class="vdot"></span></div></div>
     <span class="vplace rv">Lahore</span>
     <div class="vsky rv" data-sky="im-sky_lahore"></div>
     <p class="vp rv">My story runs from Lahore to Montreal to Toronto, and beyond.</p>
@@ -889,9 +896,9 @@ html.vlock,html.vlock body{overflow:hidden}
     <div class="vsky rv" data-sky="im-sky_toronto"></div>
     <p class="vb rv">Growth lives at the edges. Every transition left a mark.</p>
     <div class="vprints rv">
-      <figure class="vprint" style="--r:-3deg"><img data-src="im-ebitdaddy" alt="Zohaib in an EBITDADDY cap"><figcaption><b>EBITDADDY</b><i>Earnings before interest, taxes &amp; bedtime stories.</i></figcaption></figure>
-      <figure class="vprint" style="--r:2.5deg"><img data-src="im-grad" alt="Zohaib at his Ivey MBA graduation"><figcaption><b>IVEY MBA</b><i>Free cash flow, not free advice.</i></figcaption></figure>
-      <figure class="vprint" style="--r:-1.5deg"><img data-src="im-toronto_photo" alt="Zohaib in a Maple Leafs jersey on the subway"><figcaption><b>TORONTO · HOME</b></figcaption></figure>
+      <figure class="vprint" style="--r:-3deg"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-ebitdaddy" alt="Zohaib in an EBITDADDY cap"><figcaption><b>EBITDADDY</b><i>Earnings before interest, taxes &amp; bedtime stories.</i></figcaption></figure>
+      <figure class="vprint" style="--r:2.5deg"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-grad" alt="Zohaib at his Ivey MBA graduation"><figcaption><b>IVEY MBA</b><i>Free cash flow, not free advice.</i></figcaption></figure>
+      <figure class="vprint" style="--r:-1.5deg"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-toronto_photo" alt="Zohaib in a Maple Leafs jersey on the subway"><figcaption><b>TORONTO · HOME</b></figcaption></figure>
     </div>
     <p class="vp rv">We carry our roots, our flaws and our resilience, and they shape how we lead.</p>
   </section>
@@ -941,7 +948,7 @@ html.vlock,html.vlock body{overflow:hidden}
 
   <section data-route="drives" class="vs" style="--sbg:#EE1C25;--sfg:#0A090B;--sacc:#FCDF03">
     <div class="vplate rv"><span class="vnum"><b>V</b>What Drives Me</span><span class="vur" lang="ur">تجسس</span><h2 class="vh">Curiosity and connection.</h2></div>
-    <div class="vframe rv"><img data-src="im-photo" alt="Black and white portrait of Zohaib, hand to his chin"></div>
+    <div class="vframe rv"><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src="im-photo" alt="Black and white portrait of Zohaib, hand to his chin"></div>
     <p class="vp rv">I'm curious about people,</p>
     <ul class="vcur" aria-label="how they think, what they hope for and what holds them back">
       <li class="rv c1">how they <b class="vthink">think,</b></li>
@@ -1504,7 +1511,7 @@ html.vlock,html.vlock body{overflow:hidden}
   const rowA=$("vrow1"), rowB=$("vrow2");
   TT.SNAP.forEach(([src,l1,l2],i)=>{
     const f=document.createElement("figure"); f.className="vprint"; f.style.setProperty("--r",[-2,2.5,-2.5,2,-1.5,2.5,-2][i%7]+"deg");
-    f.innerHTML=`<img alt=""><figcaption><b></b>${l2?"<i></i>":""}</figcaption>`;
+    f.innerHTML=`<img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="><figcaption><b></b>${l2?"<i></i>":""}</figcaption>`;
     f.querySelector("img").src=src; f.querySelector("img").alt=l1; f.querySelector("b").textContent=l1; if(l2) f.querySelector("i").textContent=l2;
     (i<4?rowA:rowB).appendChild(f);
   });
@@ -1703,7 +1710,7 @@ html.vlock,html.vlock body{overflow:hidden}
     const xe=Math.min(W-34,Math.max(sx+12,cx)), ye=sy-Math.sqrt(Math.max(0,rr*rr-(xe-sx)*(xe-sx)));
     const rim=[]; for(let th=Math.atan2(ye-sy,xe-sx);th<0.2;th+=0.1){const x=sx+Math.cos(th)*rr,y=sy+Math.sin(th)*rr; rim.push([x,y]); if(x>W+10)break;}
     const reY=Math.min(H-150,fb.top-hr.top+fb.height*.72);
-    const A=[[cx-R*.4,cy],[xe,ye-Math.max(30,(ye-cy)*.45)],...rim,[W+34,Math.max(rim[rim.length-1][1]+40,sy)],[W+34,reY-24],[W-16,reY+6],[W*.8,H-66],[W*.4,H-52],[X0+8,H-38],[X0,H-14],[X0,H]];
+    const gap=Math.max(30,ye-cy), A=[[cx-R*.4,cy],[cx-R*.9,cy+gap*.38],[xe-R*.15,cy+gap*.72],...rim,[W+34,Math.max(rim[rim.length-1][1]+40,sy)],[W+34,reY-24],[W-16,reY+6],[W*.8,H-66],[W*.4,H-52],[X0+8,H-38],[X0,H-14],[X0,H]];
     const sMid={x:sx,y:sy,r:sr};
     G={W,H,R,cx,cy,A,sMid};
   }
