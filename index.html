@@ -19,6 +19,9 @@
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <title>Zohaib Chaudhary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -658,6 +661,10 @@ html.vlock,html.vlock body{overflow:hidden}
 
 /* portrait sits right under the opening line, bigger, still leaning right */
 .vhero .vfig{--fw:min(138vw,64svh);top:calc(var(--vt,120px) + 12px - var(--fw) * .027);bottom:auto;right:auto;left:calc(50% + 28px - var(--fw) * .495)}
+
+/* the opening waits for the portrait and the fonts, then everything appears together */
+html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #opening > *,html:not(.heroready) #nib,html:not(.heroready) #chapters,html:not(.heroready) #vnib{opacity:0!important}
+.vhero > *,#opening > *,#nib,#chapters{transition:opacity .6s ease-out}
 </style>
 
 <div class="progress" id="progress"></div>
@@ -1862,6 +1869,14 @@ html.vlock,html.vlock body{overflow:hidden}
       if(!e.isIntersecting){gone=true;return;}
       if(gone&&e.intersectionRatio>0.6){gone=false; if(intro.getAnimations) intro.getAnimations({subtree:true}).forEach(an=>{try{an.cancel();an.play();}catch(_){}});}
     }),{threshold:[0,0.6]}).observe(intro); }
+  // reveal the whole opening at once: portrait decoded + fonts ready (or 2.5s at most), then replay its intro from the start
+  { const de=document.documentElement, pic=window.__vmode?$("vportrait"):document.querySelector("#figure img");
+    const imgReady=new Promise(r=>{ if(!pic) return r(); const go=()=>{ (pic.decode?pic.decode():Promise.resolve()).catch(()=>{}).then(r); };
+      if(pic.complete&&pic.naturalWidth) go(); else { pic.addEventListener("load",go,{once:true}); pic.addEventListener("error",()=>r(),{once:true}); } });
+    const fontReady=(document.fonts&&document.fonts.ready)?document.fonts.ready.catch(()=>{}):Promise.resolve();
+    let done=false; const show=()=>{ if(done) return; done=true; de.classList.add("heroready");
+      [root.querySelector(".vhero-top"),document.getElementById("opening")].forEach(intro=>{ if(intro&&intro.getAnimations) intro.getAnimations({subtree:true}).forEach(an=>{try{an.cancel();an.play();}catch(_){}}); }); };
+    Promise.all([imgReady,fontReady]).then(show); setTimeout(show,2500); }
   /* ---------- let's connect ---------- */
   const btn=$("vconnect"), reply=$("vreply"), q1=$("vq1"), q2=$("vq2"), mailRow=$("vmailRow"), copyBtn=$("vcopy"), addr=$("vaddr");
   const lines=["Ha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
