@@ -88,7 +88,8 @@ body{font-family:var(--f-text);overflow-x:hidden}
 
 /* ---------- the world ---------- */
 .band{top:0;width:calc(var(--pw) * var(--units) / 1000);height:calc(var(--pw) * .6)}
-#world{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#world,#ink,#trail{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#ink,#trail{will-change:transform;pointer-events:none}
 .thread{fill:none;stroke:var(--tc,var(--fg));stroke-width:calc(var(--u) * 3px);stroke-linecap:round;stroke-linejoin:round}
 .art{fill:none;stroke:var(--fg);stroke-width:calc(var(--u) * 1.5px);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
 .art.soft{opacity:.35}
@@ -680,6 +681,10 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
 
 #im-photo-c{clip-path:circle(0% at 0% 50%);transition:clip-path 1.6s cubic-bezier(.65,0,.25,1)}
 #im-photo-c.lit{clip-path:circle(150% at 0% 50%)}
+
+/* the pen and plane ride above the world on their own tiny layers: moving them never repaints the big drawing */
+.penlayer{position:absolute;left:0;top:0;width:120px;height:120px;margin:-60px 0 0 -60px;pointer-events:none;will-change:transform;z-index:2}
+.penlayer svg{width:100%;height:100%;overflow:visible;display:block}
 </style>
 
 <div class="progress" id="progress"></div>
@@ -713,10 +718,6 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
           <mask id="m-lahore" maskUnits="userSpaceOnUse" x="2330" y="260" width="457" height="340"><image id="im-sky_lahore" href="img/sky_lahore.png" x="2330" y="260" width="457" height="340"/></mask>
           <mask id="m-montreal" maskUnits="userSpaceOnUse" x="3300" y="260" width="341" height="340"><image id="im-sky_montreal" href="img/sky_montreal.png" x="3300" y="260" width="341" height="340"/></mask>
           <mask id="m-toronto" maskUnits="userSpaceOnUse" x="3860" y="260" width="1117" height="340"><image id="im-sky_toronto" href="img/sky_toronto.png" x="3860" y="260" width="1117" height="340"/></mask>
-          <clipPath id="c-notravel"><rect x="-1000" y="-400" width="10450" height="1400"/><rect x="11120" y="-400" width="30000" height="1400"/></clipPath>
-          <mask id="m-contrail" maskUnits="userSpaceOnUse" x="9300" y="-400" width="2000" height="1400"><rect id="contrailReveal" x="9400" y="-400" width="0" height="1400" fill="#fff"/></mask>
-          <clipPath id="c-knot"><rect x="3120" y="150" width="230" height="260"/></clipPath>
-          <clipPath id="c-heart"><rect x="5040" y="0" width="500" height="600"/></clipPath>
         </defs>
 
         <circle id="glow1" cx="1162" cy="220" r="200" fill="url(#glow)" opacity="0"/>
@@ -749,9 +750,9 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
         </g></g>
         <g class="rev pop" data-a="7700" data-b="8050" data-s="0.7" id="dport">
           <clipPath id="cp-port"><circle cx="8175" cy="296" r="172"/></clipPath>
-          <filter id="f-bw"><feColorMatrix type="saturate" values="0"/></filter>
+          
           <circle cx="8175" cy="296" r="180" class="fill-fg"/>
-          <g clip-path="url(#cp-port)"><image id="im-photo" href="img/sail_wide.jpg" x="7955" y="131" width="440" height="330" filter="url(#f-bw)" preserveAspectRatio="xMidYMid slice"/>
+          <g clip-path="url(#cp-port)"><image id="im-photo" href="img/sail_bw.jpg" x="7955" y="131" width="440" height="330" preserveAspectRatio="xMidYMid slice"/>
           <image id="im-photo-c" href="img/sail_wide.jpg" x="7955" y="131" width="440" height="330" preserveAspectRatio="xMidYMid slice"/></g>
         </g>
 
@@ -770,15 +771,26 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
         </g>
 
         <g id="art"></g>
-        <path id="contrail" mask="url(#m-contrail)"/>
-        <path id="thread" class="thread" clip-path="url(#c-notravel)"/>
-        <use href="#thread" clip-path="url(#c-knot)" style="--tc:var(--red)"/>
-        <use href="#thread" clip-path="url(#c-heart)" style="--tc:var(--red)"/>
-        <g id="plane" class="plane" style="opacity:0"><path d="M36,0 Q33,-4.5 24,-4.5 L6,-4.5 L-9,-33 L-17,-33 L-7,-4.5 L-24,-4.5 L-31,-14 L-36,-14 L-32,-3 L-32,3 L-36,14 L-31,14 L-24,4.5 L-7,4.5 L-17,33 L-9,33 L6,4.5 L24,4.5 Q33,4.5 36,0 Z"/><path d="M-3,-17 l7,0 0,4 -7,0 z M-3,13 l7,0 0,4 -7,0 z" style="fill:var(--fg)"/></g>
-        <g id="nib" class="nib"><path d="M0,0 L-8,-27 Q0,-38 8,-27 Z"/><path class="slit" d="M0,-2 L0,-19"/></g>
       </svg>
+      <svg id="trail" viewBox="0 0 20750 600" preserveAspectRatio="xMinYMin meet" aria-hidden="true"><defs>
+          <mask id="m-contrail" maskUnits="userSpaceOnUse" x="9300" y="-400" width="2000" height="1400"><rect id="contrailReveal" x="9400" y="-400" width="0" height="1400" fill="#fff"/></mask></defs>
+        <path id="contrail" mask="url(#m-contrail)"/>
+      </svg>
+      <svg id="ink" viewBox="0 0 20750 600" preserveAspectRatio="xMinYMin meet" aria-hidden="true">
+        <defs>
+          <clipPath id="c-notravel"><rect x="-1000" y="-400" width="10450" height="1400"/><rect x="11120" y="-400" width="30000" height="1400"/></clipPath>
+          <clipPath id="c-knot"><rect x="3120" y="150" width="230" height="260"/></clipPath>
+          <clipPath id="c-heart"><rect x="5040" y="0" width="500" height="600"/></clipPath>
+        </defs>
+        <path id="thread" class="thread" style="visibility:hidden"/>
+        <g id="threadG"></g>
+        <g id="threadKnot" clip-path="url(#c-knot)" style="--tc:var(--red)"></g>
+        <g id="threadHeart" clip-path="url(#c-heart)" style="--tc:var(--red)"></g>
+            </svg>
     </div>
 
+    <div class="penlayer" id="nib" aria-hidden="true"><svg viewBox="-60 -60 120 120"><g class="nib"><path d="M0,0 L-8,-27 Q0,-38 8,-27 Z"/><path class="slit" d="M0,-2 L0,-19"/></g></svg></div>
+    <div class="penlayer" id="plane" aria-hidden="true" style="opacity:0"><svg viewBox="-60 -60 120 120"><g class="plane"><path d="M36,0 Q33,-4.5 24,-4.5 L6,-4.5 L-9,-33 L-17,-33 L-7,-4.5 L-24,-4.5 L-31,-14 L-36,-14 L-32,-3 L-32,3 L-36,14 L-31,14 L-24,4.5 L-7,4.5 L-17,33 L-9,33 L6,4.5 L24,4.5 Q33,4.5 36,0 Z"/><path d="M-3,-17 l7,0 0,4 -7,0 z M-3,13 l7,0 0,4 -7,0 z" style="fill:var(--fg)"/></g></svg></div>
     <div class="layer caps" id="caps">
       <!-- I -->
       <div class="cap" style="--x:1310;--y:7;--w:620">
@@ -1263,7 +1275,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
   const tally={started:false,t0:0};
   function runTally(now){
     if(!tally.started) return;
-    const t=reduce?1:Math.min(1,(now-tally.t0)/1600), e=1-Math.pow(1-t,3);
+    const t=reduce?1:Math.max(0,Math.min(1,(now-tally.t0)/1600)), e=1-Math.pow(1-t,3);
     cPlaces.textContent=Math.round(14*e); cConts.textContent=Math.round(3*Math.min(1,e*1.15));
     if(t<1) requestAnimationFrame(runTally);
   }
@@ -1293,7 +1305,29 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
 
   /* ---------- sampling ---------- */
   const total=thread.getTotalLength(), N=5000, reach=new Float32Array(N+1), lens=new Float32Array(N+1);
-  let mx=-1e9;for(let i=0;i<=N;i++){const l=total*i/N,p=thread.getPointAtLength(l);mx=Math.max(mx,p.x);reach[i]=mx;lens[i]=l;}
+  const PX=new Float32Array(N+1), PY=new Float32Array(N+1);
+  let mx=-1e9;for(let i=0;i<=N;i++){const l=total*i/N,p=thread.getPointAtLength(l);mx=Math.max(mx,p.x);reach[i]=mx;lens[i]=l;PX[i]=p.x;PY[i]=p.y;}
+  // Safari's getPointAtLength walks the whole path every call; read positions from this table instead
+  // the visible thread is cut into short pieces: finished pieces never repaint, only the piece being drawn changes each frame
+  const threadG=document.getElementById("threadG"), chunks=[];
+  {const D=thread.getAttribute("d"), segs=D.match(/[MCL][^MCL]*/g)||[]; let start=null, buf=[], last=null;
+   const lastPt=sg=>{const n=sg.match(/-?\d+(?:\.\d+)?/g);return n[n.length-2]+","+n[n.length-1];};
+   const emit=()=>{if(!buf.length||!start)return; const e=document.createElementNS(NS,"path"); e.setAttribute("class","thread"); e.setAttribute("d","M"+start+buf.join("")); threadG.appendChild(e); chunks.push({e}); buf=[]; start=last;};
+   for(const sg of segs){ if(sg[0]==="M"){ emit(); start=lastPt(sg); last=start; continue; } buf.push(sg); last=lastPt(sg); if(buf.length>=14) emit(); }
+   emit();
+   let acc=0; chunks.forEach(c=>{c.L=c.e.getTotalLength(); c.a=acc; acc+=c.L; c.b=acc; c.st=-1; c.parts=[c.e];
+     // the flight path hides the ink (the plane's contrail takes over): skip pieces fully inside it, clip only the ones on its edges
+     const bb=c.e.getBBox(), x0=bb.x, x1=bb.x+bb.width;
+     if(x0>=9450 && x1<=11120){ c.e.remove(); c.parts=[]; }
+     else if(x1>9450 && x0<11120){ c.e.setAttribute("clip-path","url(#c-notravel)"); }
+     [["threadKnot",3120,3350],["threadHeart",5040,5540]].forEach(([g,lo,hi])=>{ if(x1>lo&&x0<hi){ const k2=c.e.cloneNode(); k2.removeAttribute("clip-path"); document.getElementById(g).appendChild(k2); c.parts.push(k2);} });
+     c.parts.forEach(e=>{e.style.strokeDasharray=c.L+" "+(c.L+1); e.style.strokeDashoffset=c.L;});});
+   const k=acc>0?total/acc:1; chunks.forEach(c=>{c.a*=k;c.b*=k;});}
+  function drawThread(len){
+    for(const c of chunks){ let st, off;
+      if(len>=c.b){st=2;off=0;} else if(len<=c.a){st=0;off=c.L;} else {st=1;off=c.L*(1-(len-c.a)/(c.b-c.a));}
+      if(st!==1&&st===c.st) continue; c.st=st; const o=off.toFixed(1), v=st===0?"hidden":"visible"; for(const e of c.parts){ e.style.strokeDashoffset=o; e.style.visibility=v; } } }
+  function ptAt(l){const f=Math.max(0,Math.min(N,l/total*N)),i=Math.min(N-1,Math.floor(f)),t=f-i;return {x:PX[i]+(PX[i+1]-PX[i])*t,y:PY[i]+(PY[i+1]-PY[i])*t};}
   thread.style.strokeDasharray=total+" "+total;
   function lenAt(x){let lo=0,hi=N;while(lo<hi){const m=(lo+hi)>>1;if(reach[m]<x)lo=m+1;else hi=m;}return lens[lo];}
 
@@ -1425,19 +1459,18 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
     let tip=(iw*0.6 - origin + x)/kp + prog*(iw*0.4/kp + 260);
     if(reduce) tip=1e6;
     const Ln=lenAt(Math.max(START[0],tip));
-    thread.style.strokeDashoffset=total-(tip<START[0]?0:Ln);
-    const p=thread.getPointAtLength(Math.max(0,Ln)), q=thread.getPointAtLength(Math.max(0,Ln-6));
+    drawThread(tip<START[0]?0:Ln);
+    const p=ptAt(Math.max(0,Ln)), q=ptAt(Math.max(0,Ln-6));
     const ang=Math.atan2(p.y-q.y,p.x-q.x)*180/Math.PI;
-    nib.setAttribute("transform",`translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${(ang*0.25-28).toFixed(1)})`);
+    const nibX=scr(p.x), nibY=bandTop + p.y*kp;
+    nib.style.transform=`translate3d(${nibX.toFixed(1)}px,${nibY.toFixed(1)}px,0) rotate(${(ang*0.25-28).toFixed(1)}deg) scale(${kp.toFixed(4)})`;
     const flying=tip>9500&&tip<11125&&!reduce;
     {const pc=document.getElementById("im-photo-c"); if(pc){const on=reduce||Ln>=PORT_KNOT; if(pc._on!==on){pc.classList.toggle("lit",on);pc._on=on;}}}
-    nib.style.opacity=flying?0:1;
-    plane.style.opacity=flying?1:0;
-    if(flying) plane.setAttribute("transform",`translate(${p.x.toFixed(1)},${p.y.toFixed(1)}) rotate(${ang.toFixed(1)}) scale(1.35)`);
-    contrailReveal.setAttribute("width",Math.max(0,Math.min(1760,(reduce?1e6:tip)-9400-30)).toFixed(0));
+    if(nib._f!==flying){nib._f=flying; nib.style.opacity=flying?0:1; plane.style.opacity=flying?1:0;}
+    if(flying) plane.style.transform=`translate3d(${nibX.toFixed(1)}px,${nibY.toFixed(1)}px,0) rotate(${ang.toFixed(1)}deg) scale(${(1.35*kp).toFixed(4)})`;
+    {const cw=Math.max(0,Math.min(1760,(reduce?1e6:tip)-9400-30)).toFixed(0); if(contrailReveal._w!==cw){contrailReveal.setAttribute("width",cw);contrailReveal._w=cw;}}
 
     // full-screen colour spill from the nib
-    const nibX=scr(p.x), nibY=bandTop + p.y*kp;
     let ci=0; CH.forEach((c,i)=>{if(c.x<=tip) ci=i;});
     const t=reduce?1:clamp((tip-CH[ci].x)/320);
     const prevC=CH[Math.max(0,ci-1)], curC=CH[ci];
@@ -1450,18 +1483,21 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
     const useC=(ci>0&&t<0.45)?prevC:curC;
     if(useC!==lastC){setPalette(useC);lastC=useC;}
 
-    for(const a of arts){const tt=clamp((tip-a.a)/(a.b-a.a)); if(a.fade) a.e.style.opacity=(tt*a.max).toFixed(3); else a.e.style.strokeDashoffset=(1-tt).toFixed(3);}
-    for(const r of revs){const tt=ease(clamp((tip-r.a)/(r.b-r.a))); r.e.style.opacity=tt;
+    // only touch elements whose value actually changed (Safari re-rasterises the big SVG on every style write)
+    for(const a of arts){const tt=clamp((tip-a.a)/(a.b-a.a)); const v=a.fade?(tt*a.max).toFixed(3):(1-tt).toFixed(3); if(a._v===v) continue; a._v=v; if(a.fade) a.e.style.opacity=v; else a.e.style.strokeDashoffset=v;}
+    for(const r of revs){const tt=ease(clamp((tip-r.a)/(r.b-r.a))); const v=tt.toFixed(3); if(r._v===v) continue; r._v=v; r.e.style.opacity=v;
       r.e.style.transform=r.s!==null?`scale(${(r.s+(1-r.s)*tt).toFixed(3)})`:`translateY(${((1-tt)*16).toFixed(1)}px)`;}
+    const gk=[clamp((tip-1170)/120).toFixed(2),clamp((tip-16330)/120).toFixed(2),clamp((tip-16350)/400).toFixed(3),clamp((tip-1170)/500).toFixed(3)].join();
+    if(render._gk!==gk){render._gk=gk;
     glow1.setAttribute("opacity",clamp((tip-1170)/120).toFixed(2));
     glow1.setAttribute("r",(200+clamp((tip-1170)/500)*160).toFixed(0));
     const g2=clamp((tip-16330)/120), g2big=clamp((tip-16350)/400);
     glow2.setAttribute("opacity",g2.toFixed(2));
     glow2.setAttribute("r",(200+ease(g2big)*180).toFixed(0));
-    flame.style.opacity=g2.toFixed(2); flame.style.transform=`scale(${(0.3+0.7*ease(g2)).toFixed(3)})`;
+    flame.style.opacity=g2.toFixed(2); flame.style.transform=`scale(${(0.3+0.7*ease(g2)).toFixed(3)})`;}
     let landed=0; const conts=new Set();
-    for(const st of stamps){const tt=reduce?1:clamp((tip-st.x+30)/60); const s2=1.7-0.7*ease(tt);
-      st.g.setAttribute("transform",`translate(${st.cx},${st.cy}) rotate(${st.rot}) scale(${s2.toFixed(3)})`); st.g.style.opacity=tt.toFixed(2);
+    for(const st of stamps){const tt=reduce?1:clamp((tip-st.x+30)/60); const s2=1.7-0.7*ease(tt); const v=tt.toFixed(3);
+      if(st._v!==v){st._v=v; st.g.setAttribute("transform",`translate(${st.cx},${st.cy}) rotate(${st.rot}) scale(${s2.toFixed(3)})`); st.g.style.opacity=tt.toFixed(2);}
       if(tt>0.6){landed++;conts.add(st.cont);}}
     // the tally counts up as soon as the Travels page is in view, so the final numbers are read on that page
     const tallyX=scr(9440);
@@ -1473,7 +1509,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
     for(const lw of lampWords){
       let lit=1;
       if(!mobile&&!reduce){lit=clamp((nibX + 80 - (scr(lw.capX)+lw.ox))/220);}
-      const w=lw.w.style;
+      const w=lw.w.style; const lv=lit.toFixed(3); if(lw._v===lv) continue; lw._v=lv;
       w.opacity=(0.14+0.86*lit).toFixed(3);
       if(lw.kind==="doubt") w.filter=`blur(${((1-lit)*9).toFixed(1)}px)`;
       if(lw.kind==="courage") w.fontWeight=String(Math.round(150+700*lit));
@@ -1571,7 +1607,7 @@ html:not(.heroready) .vhero > *:not(.vspill):not(.vcap),html:not(.heroready) #op
 
   /* ---------- reveals ---------- */
   const tally=$("vtally");
-  function countUp(){tally.querySelectorAll("b").forEach(b=>{const n=+b.dataset.n;if(reduce){b.textContent=n;return;}const t0=performance.now();const f=t=>{const k=Math.min(1,(t-t0)/1500),e=1-Math.pow(1-k,3);b.textContent=Math.round(n*e);if(k<1)requestAnimationFrame(f);};requestAnimationFrame(f);});}
+  function countUp(){tally.querySelectorAll("b").forEach(b=>{const n=+b.dataset.n;if(reduce){b.textContent=n;return;}const t0=performance.now();const f=t=>{const k=Math.max(0,Math.min(1,(t-t0)/1500)),e=1-Math.pow(1-k,3);b.textContent=Math.round(n*e);if(k<1)requestAnimationFrame(f);};requestAnimationFrame(f);});}
   // reveals play forwards on the way down and rewind when you scroll back up past them, so every moment can be replayed
   const io=("IntersectionObserver" in window)?new IntersectionObserver(es=>{es.forEach(e=>{const t=e.target;
       if(e.isIntersecting&&e.intersectionRatio>=0.2){ if(t.classList.contains("in")) return; t.classList.add("in");
