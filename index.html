@@ -17,6 +17,8 @@
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/portrait.webp" fetchpriority="high">
 <title>Zohaib Chaudhary</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -649,10 +651,13 @@ html.vlock,html.vlock body{overflow:hidden}
 .vstory img{border:0;outline:0}
 .vstory img[src^="data:image/gif"]{visibility:hidden}
 .vstory button,.vstory a{-webkit-tap-highlight-color:transparent}
-.vvow .tr{animation-name:trackm}
+.vvow .tr{animation:none!important;display:inline;opacity:1;filter:none}
 @keyframes trackm{from{opacity:0;filter:blur(4px)}}
 
 .vs > .vcap{position:absolute;left:0;top:-1px;width:100%;height:56px;z-index:1;pointer-events:none;display:block}
+
+/* portrait sits right under the opening line, bigger, still leaning right */
+.vhero .vfig{--fw:min(138vw,64svh);top:calc(var(--vt,120px) + 12px - var(--fw) * .027);bottom:auto;right:auto;left:calc(50% + 28px - var(--fw) * .495)}
 </style>
 
 <div class="progress" id="progress"></div>
@@ -1711,12 +1716,14 @@ html.vlock,html.vlock body{overflow:hidden}
     // the tangle sits just under the end of "Chaudhary", clear of the portrait and the screen edges;
     // its tail curls left beneath "Swipe up to begin" and lands in the gutter where The Spark's thread begins
     const W=hero.clientWidth, H=hero.clientHeight, hr=hero.getBoundingClientRect();
-    const nm=hero.querySelector(".vname span:last-child"), rg=document.createRange(); rg.selectNodeContents(nm);
+    // sits just below the word "begin" in "Swipe up to begin"
+    const sw=hero.querySelector(".vswipe"), tn=[...sw.childNodes].find(n=>n.nodeType===3&&n.nodeValue.trim()), rg=document.createRange(); rg.selectNodeContents(tn);
     const nb=rg.getBoundingClientRect(), nr=nb.right-hr.left, nbot=nb.bottom-hr.top;
-    const R=Math.min(30, (H-nbot)*0.3, W*0.08);
-    const cx=Math.min(W-R*1.5, nr-R*0.6), cy=Math.min(H-R*1.6, nbot+R*1.25);
+    const R=Math.min(24, (H-nbot)*0.36, W*0.07);
+    const cx=Math.min(W-R*1.5, nr-R*0.9), cy=Math.min(H-R*1.3, nbot+R*1.25);
+    {const vv=top.querySelector(".vvow").getBoundingClientRect(); hero.style.setProperty("--vt",(vv.bottom-hr.top).toFixed(0)+"px");}
     tg.setAttribute("viewBox",`0 0 ${W} ${H}`);
-    const A=[[cx-R*.4,cy],[cx-R*1.3,cy+R*.9],[W*.55,H-26],[W*.3,H-24],[X0+10,H-20],[X0,H-8],[X0,H]];
+    const A=[[cx-R*.4,cy],[cx-R*1.4,cy+R*.6],[Math.max(X0+30,cx-R*3.4),Math.min(H-10,cy+R*.9)],[X0+8,H-10],[X0,H-3],[X0,H]];
     G={W,H,R,cx,cy,A,sMid:null};
   }
   const heroEnd=()=>hero.offsetHeight-(VH||window.innerHeight)*0.62;
