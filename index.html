@@ -1969,10 +1969,10 @@ html.heroready .vname span:last-child,html.heroready .bigname span:last-child{ba
   { const de=document.documentElement, pic=window.__vmode?$("vportrait"):document.querySelector("#figure img");
     const imgReady=new Promise(r=>{ if(!pic) return r(); const go=()=>{ (pic.decode?pic.decode():Promise.resolve()).catch(()=>{}).then(r); };
       if(pic.complete&&pic.naturalWidth) go(); else { pic.addEventListener("load",go,{once:true}); pic.addEventListener("error",()=>r(),{once:true}); } });
-    const fontReady=(document.fonts&&document.fonts.ready)?document.fonts.ready.catch(()=>{}):Promise.resolve();
+    const fontReady=(document.fonts&&document.fonts.load)?Promise.all(['800 1em Lexend','600 1em Lexend','400 1em Newsreader','italic 400 1em Newsreader','400 1em "IBM Plex Mono"'].map(f=>document.fonts.load(f,"Az").catch(()=>{}))):Promise.resolve();
     let done=false; const show=()=>{ if(done) return; done=true; de.classList.add("heroready");
       [root.querySelector(".vhero-top"),document.getElementById("opening")].forEach(intro=>{ if(intro&&intro.getAnimations) intro.getAnimations({subtree:true}).forEach(an=>{try{an.cancel();an.play();}catch(_){}}); }); };
-    Promise.all([imgReady,fontReady]).then(show); setTimeout(show,2500); }
+    Promise.all([imgReady,fontReady]).then(show); setTimeout(show,1400); }
   /* ---------- let's connect ---------- */
   const btn=$("vconnect"), reply=$("vreply"), q1=$("vq1"), q2=$("vq2"), mailRow=$("vmailRow"), copyBtn=$("vcopy"), addr=$("vaddr");
   const lines=["Bahaha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
