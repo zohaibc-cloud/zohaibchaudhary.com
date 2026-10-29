@@ -174,7 +174,7 @@ body{font-family:var(--f-text);overflow-x:hidden}
   padding:10px max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));flex-wrap:wrap;pointer-events:none}
 .chapters button{pointer-events:auto;font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg);background:var(--bg);border:1px solid var(--fg);border-radius:999px;padding:5px 10px;cursor:pointer;transition:color .4s,border-color .4s,background .4s}
 .chapters button[aria-current="true"]{background:var(--fg);color:var(--bg)}
-.progress{position:fixed;left:0;top:0;height:4px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--acc);z-index:6}
+.progress{position:fixed;left:0;top:0;height:4px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--barc,var(--acc));z-index:6}
 
 /* tall, narrow screens: the figure moves to centre and the name sits across it */
 @media (max-aspect-ratio:1/1){
@@ -1120,6 +1120,10 @@ html.heroready .vname span:last-child,html.heroready .bigname span:last-child{ba
 <nav class="chapters" aria-label="Chapters" id="chapters"></nav>
 
 <script>
+// the browser's own scrollbar and the progress line take the current chapter's colours, so they never vanish into a background
+window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!bg) return;
+  const h=bg.replace("#",""), v=[0,2,4].map(i=>parseInt(h.substr(i,2),16)/255).map(c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)), lum=.2126*v[0]+.7152*v[1]+.0722*v[2];
+  de.style.setProperty("--barc",acc); de.style.scrollbarColor=fg+" "+bg; de.style.colorScheme=lum<.35?"dark":"light"; };
 (function(){
   const NS="http://www.w3.org/2000/svg", UNITS=20750, root=document.documentElement;
   root.style.setProperty("--units",UNITS);
@@ -1471,7 +1475,7 @@ html.heroready .vname span:last-child,html.heroready .bigname span:last-child{ba
   const clamp=v=>Math.min(1,Math.max(0,v));
   const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
   let lastC=null;
-  function setPalette(c){for(const el of [stage,root]){el.style.setProperty("--bg",c.bg);el.style.setProperty("--fg",c.fg);el.style.setProperty("--acc",c.acc);}}
+  function setPalette(c){for(const el of [stage,root]){el.style.setProperty("--bg",c.bg);el.style.setProperty("--fg",c.fg);el.style.setProperty("--acc",c.acc);} if(window.__setChrome) window.__setChrome(c.bg,c.fg,c.acc);}
 
   function render(){
     const x=current, prog=maxX?x/maxX:1;
@@ -1909,6 +1913,7 @@ html.heroready .vname span:last-child,html.heroready .bigname span:last-child{ba
     if(el.id==="vsteps"&&on) sw.forEach((x,i)=>{x.style.transitionDelay=(i*.12)+"s";});
     if(el.classList.contains("vstampwrap")) el.querySelectorAll(".vstamp").forEach(x=>x.classList.toggle("in",on)); }
   function sweep(vh){ const line=vh*0.94, y=window.scrollY; revealEls.forEach(el=>{ if(el._t==null) return; const top=el._t-y; setIn(el, top < line - el._h*0.2); }); }
+  let chromeKey=null;
   function frame(){
     ticking=false; if(!window.__vmode) return;
     const vh=VH||window.innerHeight, tipY=vh*0.62;
@@ -1916,6 +1921,8 @@ html.heroready .vname span:last-child,html.heroready .bigname span:last-child{ba
     // read everything first, then write only what changed: keeps scrolling smooth on phones
     const rects=secs.map(s=>s.sec.getBoundingClientRect()), heroBottom=hero.getBoundingClientRect().bottom;
     secs.forEach(s=>{const r=rects[s.i], on=r.bottom>-40&&r.top<vh+40; if(s._on!==on){s.sec.classList.toggle("onscreen",on);s._on=on;}});
+    { let top=null; for(const s of secs){const r=rects[s.i]; if(r.top<=2&&r.bottom>2){top=s;break;}} const key=top?top.i:-1;
+      if(key!==chromeKey){ chromeKey=key; const st=(top?top.sec:hero).style; window.__setChrome(st.getPropertyValue("--sbg").trim(),st.getPropertyValue("--sfg").trim(),st.getPropertyValue("--sacc").trim()); } }
     secs.forEach(s=>{
       const r=rects[s.i], far=r.top>vh*1.25||r.bottom<-vh*0.25;
       const first=s.i===0, t=reduce?1:first?clamp((vh*1.04-r.top)/(vh*0.5)):clamp((vh*0.98-r.top)/(vh*0.55));
