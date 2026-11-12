@@ -1578,10 +1578,14 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   }
 
   let target=0, current=0, running=false;
-  function loop(){
+  // follow the scroll with a short, frame-rate independent glide: the same feel on 60 Hz and 120 Hz screens,
+  // tight enough that a trackpad flick never feels like it is dragging behind the fingers
+  const GLIDE=55; let lastT=0;
+  function loop(t){
+    const dt=lastT?Math.min(50,t-lastT):16.7; lastT=t;
     const diff=target-current;
-    if(Math.abs(diff)<0.4){current=target;render();running=false;return;}
-    current+=diff*0.11; render(); requestAnimationFrame(loop);
+    if(Math.abs(diff)<0.4){current=target;render();running=false;lastT=0;return;}
+    current+=diff*(1-Math.exp(-dt/GLIDE)); render(); requestAnimationFrame(loop);
   }
   addEventListener("scroll",()=>{if(window.__vmode)return; target=readScroll(); if(reduce){current=target;render();return;} if(!running){running=true;requestAnimationFrame(loop);}},{passive:true});
   addEventListener("resize",layout);
