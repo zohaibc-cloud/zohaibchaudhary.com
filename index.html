@@ -1673,17 +1673,21 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     dwell(q,wp); setWork(wp,off); return Math.min(maxX,x);}
   /* ---------- The Work: drawn by scroll while the world waits ---------- */
   const WP=$("dwork"), wpath=$("dwpath"); let wL=1, wpLast=-1, wbuilt=false;
-  function buildWork(){ if(!WP||mobile) return; const sm=a=>"M"+f(a[0])+smooth(a);
+  function buildWork(){ if(!WP||mobile) return; const keepT=WP.style.transform; WP.style.transform="";   /* measure the panel in its own place, not mid-slide */
+    const sm=a=>"M"+f(a[0])+smooth(a);
     const R=el=>el.getBoundingClientRect(), mom=[...$("dmom").children].map(R), ai=mom[mom.length-1], dv=R($("ddots")), sc=dv.width/300;
     const P=[[34,44],[112,18],[196,52],[268,26],[246,118],[150,134],[62,108]].map(q=>[dv.left+q[0]*sc,dv.top+q[1]*sc]);
     const cr=R(WP.querySelector(".dcards")), y0=bandTop+520*kp;
-    const a=[[-4,y0],[ai.left*0.5,ai.bottom+60],[ai.left-6,ai.bottom+6],[ai.right+4,ai.bottom+4],[ai.right+36,ai.bottom-20],[P[0][0]-50,P[0][1]-10],P[0]];
+    // the thread picks up exactly where the key went in: out of the keyhole, down to the bottom, left under everything, up to "and now, AI."
+    const khE=$("dkhole"), khR=khE?khE.getBoundingClientRect():null, ye=innerHeight-68;
+    const head=(khR&&khR.width)?[[khR.left+khR.width/2,khR.top+khR.height*.68],[khR.left+khR.width/2+4,ye-40],[khR.left+khR.width/2-50,ye],[Math.max(ai.left*0.5+90,dv.left-40),ye+2],[ai.left*0.5+30,ye-6]]:[[-4,y0]];
+    const a=head.concat([[ai.left*0.5,ai.bottom+60],[ai.left-6,ai.bottom+6],[ai.right+4,ai.bottom+4],[ai.right+36,ai.bottom-20],[P[0][0]-50,P[0][1]-10],P[0]]);
     let d=sm(a); P.slice(1).concat([P[0]]).forEach(q=>d+=" L"+f(q));
     wpath.setAttribute("d",sm(a)); let acc=wpath.getTotalLength(); wDotL=[acc]; for(let k=1;k<P.length;k++){acc+=Math.hypot(P[k][0]-P[k-1][0],P[k][1]-P[k-1][1]); wDotL.push(acc);}
     { const kh=$("dkhole"); if(kh){ const r=kh.getBoundingClientRect(); WP.style.setProperty("--ox",(r.left+r.width/2).toFixed(0)+"px"); WP.style.setProperty("--oy",(r.top+r.height*.4).toFixed(0)+"px"); } }
     const b=[P[0],[P[0][0]-16,dv.bottom+30],[dv.left+dv.width*.6,dv.bottom+44],[cr.left-20,cr.bottom+26],[cr.right+20,cr.bottom+30],[innerWidth+6,bandTop+548*kp]];
     d+=smooth(b); wpath.setAttribute("d",d); $("dwline").setAttribute("viewBox",`0 0 ${innerWidth} ${innerHeight}`);
-    wL=wpath.getTotalLength(); wpath.style.strokeDasharray=wL+" "+wL; wpLast=-1; wbuilt=true; }
+    wL=wpath.getTotalLength(); wpath.style.strokeDasharray=wL+" "+wL; wpLast=-1; wbuilt=true; WP.style.transform=keepT; }
   // in: the panel spills open from the pen. out: it rides away to the left with the story, as if it were a page in the strip,
   // its line joining the world's thread at the edge; scrolling back brings it in the same way
   // the white key scene: the thread arrives from the story, draws an old key, slides it into the keyhole, and the hole lights
