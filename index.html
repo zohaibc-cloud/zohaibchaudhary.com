@@ -1642,7 +1642,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     origin = iw - 1000*kp;                       // world unit 1000 sits at the opening's right edge
     band.style.left=origin+"px"; if(!mobile) capsLayer.style.left=origin+"px";
     maxX=Math.max(0,(UNITS-1000)*kp);
-    XP=Math.max(0,Math.min(maxX,origin+WORK_U*kp-iw*0.985)); DW=Math.round(ih*1.7); PL=Math.round(ih*2.4);
+    XP=Math.max(0,Math.min(maxX,origin+WORK_U*kp-iw*0.985)); DW=Math.round(ih*2.4); PL=Math.round(ih*2.4);
     scroller.style.height=(maxX+DW+PL+ih)+"px";
     // the opening's line runs from the scribble to where the world's thread begins
     // line the scribble up with the centre of the sun (and the brushed name across it)
@@ -1706,9 +1706,9 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     kpath.setAttribute("d",d); $("dkline").setAttribute("viewBox",`0 0 ${innerWidth} ${innerHeight}`);
     kL=kpath.getTotalLength(); kpath.style.strokeDasharray=kL+" "+kL; kLast=-1; kbuilt=true; }
   function dwell(q,wp){ if(!DK) return; if(!kbuilt&&q>0) buildKey(); const key=q+(wp||0)*10; if(Math.abs(key-kLast)<0.001) return; kLast=key;
-    const open=q>0.02&&(wp||0)<0.25; if(open&&!DK.classList.contains("open")){ kbuilt=false; buildKey(); } DK.classList.toggle("open",open); DK.setAttribute("aria-hidden",open?"false":"true");
-    DK.classList.toggle("k1",q>=0.08); DK.classList.toggle("k3",q>=0.62);
-    const dp=Math.max(0,Math.min(1,(q-0.1)/0.45)); kpath.style.strokeDashoffset=(kL*(1-dp)).toFixed(1);
+    const open=q>0.3&&(wp||0)<0.25;   /* the first stretch is a still moment on "there's a person with a story" */ if(open&&!DK.classList.contains("open")){ kbuilt=false; buildKey(); } DK.classList.toggle("open",open); DK.setAttribute("aria-hidden",open?"false":"true");
+    DK.classList.toggle("k1",q>=0.35); DK.classList.toggle("k3",q>=0.77);
+    const dp=Math.max(0,Math.min(1,(q-0.37)/0.35)); kpath.style.strokeDashoffset=(kL*(1-dp)).toFixed(1);
     $("dkhole").classList.toggle("lit",dp>=1); }
   let wOff=0;
   function setWork(p,off){ if(!WP) return; off=off||0; if(!wbuilt&&p>0) buildWork(); if(Math.abs(p-wpLast)<0.001&&Math.abs(off-wOff)<0.5) return; wpLast=p; wOff=off;
