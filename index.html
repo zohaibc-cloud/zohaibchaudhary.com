@@ -333,9 +333,22 @@ html:not(.heroready) .vday,html:not(.heroready) .intro .day{animation:none;opaci
 .dwl{display:inline-block;opacity:.34;transform:translateY(.12em);filter:blur(.6px);transition:opacity .35s ease-out,transform .45s cubic-bezier(.2,.7,.1,1),filter .35s}
 .dwl.on{opacity:1;transform:none;filter:none}
 @media (prefers-reduced-motion:reduce){.dwl{opacity:1;transform:none;filter:none;transition:none}}
+/* ===================== desktop: "Real change begins…", its own white scene where the thread becomes a key ===================== */
+.dkey{position:fixed;inset:0;z-index:4;background:#F3F3F3;color:#0A090B;--bg:#F3F3F3;--fg:#0A090B;--acc:#EE1C25;clip-path:circle(0px at var(--ox,62%) var(--oy,60%));transition:clip-path .9s cubic-bezier(.65,0,.25,1),visibility 0s .9s;pointer-events:none;visibility:hidden}
+.dkey.open{clip-path:circle(150% at var(--ox,62%) var(--oy,60%));visibility:visible;transition:clip-path .9s cubic-bezier(.65,0,.25,1),visibility 0s}
+@media (max-width:700px),(max-aspect-ratio:4/5){.dkey{display:none!important}}
+.dkline{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.dkline path{fill:none;stroke:#0A090B;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.dksay{position:absolute;left:7vw;top:11vh;margin:0;max-width:15ch;font-family:var(--f-display);font-weight:600;font-size:calc(var(--ts) * .058);line-height:1.04;letter-spacing:-.03em;text-wrap:balance}
+.dkb{position:absolute;right:8vw;left:auto;text-align:right;top:68vh;bottom:auto;margin:0;max-width:24ch;font-family:var(--f-text);font-size:calc(var(--ts) * .036);line-height:1.25;text-wrap:balance}
+.dkey .dkhole{position:absolute;right:15vw;top:47vh;width:calc(var(--ts) * .085);height:auto;margin:0;align-self:auto}
+.dkey .st{opacity:0;transform:translateY(26px);transition:opacity .7s,transform .9s cubic-bezier(.2,.7,.1,1)}
+.dkey.k1 .st.t1,.dkey.k3 .st.t3{opacity:1;transform:none}
+.dkey.k3 .vunlock{background-size:100% 40%}
+@media (prefers-reduced-motion:reduce){.dkey,.dkey *{transition:none!important}}
 /* ===================== desktop: The Work, an interlude that opens over the story while the scroll pauses ===================== */
-.dwork{position:fixed;inset:0;z-index:4;background:#0A090B;color:#F3F3F3;--bg:#0A090B;--fg:#F3F3F3;--acc:#FCDF03;--sbg:#0A090B;--sfg:#F3F3F3;--sacc:#FCDF03;clip-path:circle(0px at 62% 60%);transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s .85s;pointer-events:none;visibility:hidden}
-.dwork.open{clip-path:circle(150% at 62% 60%);pointer-events:auto;visibility:visible;transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s}
+.dwork{position:fixed;inset:0;z-index:4;background:#0A090B;color:#F3F3F3;--bg:#0A090B;--fg:#F3F3F3;--acc:#FCDF03;--sbg:#0A090B;--sfg:#F3F3F3;--sacc:#FCDF03;clip-path:circle(0px at var(--ox,62%) var(--oy,60%));transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s .85s;pointer-events:none;visibility:hidden}
+.dwork.open{clip-path:circle(150% at var(--ox,62%) var(--oy,60%));pointer-events:auto;visibility:visible;transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s}
 .dwork.shut{visibility:hidden}
 .dwork.ride{transition:none;clip-path:none;box-shadow:24px 0 60px rgba(0,0,0,.35)}
 @media (max-width:700px),(max-aspect-ratio:4/5){.dwork{display:none!important}}
@@ -355,6 +368,8 @@ html:not(.heroready) .vday,html:not(.heroready) .intro .day{animation:none;opaci
 .dwork.s1 .dmom li{opacity:1;transform:none}
 .dwork.s1 .dmom li:nth-child(2){transition-delay:.12s}.dwork.s1 .dmom li:nth-child(3){transition-delay:.24s}.dwork.s1 .dmom li:nth-child(4){transition-delay:.36s}
 .ddots{width:min(100%,430px)}
+.ddots circle{animation:none!important;transition:fill .35s,opacity .35s}
+.ddots circle.on{fill:var(--yellow);opacity:1;animation:vjoin .7s cubic-bezier(.3,1.6,.5,1) both!important}
 .dwork .dcards{opacity:0;transform:translateY(60px) rotate(-6deg);transition:opacity .6s,transform 1.1s cubic-bezier(.2,1.2,.3,1)}
 .dwork.s4 .dcards{opacity:1;transform:none}
 .dwork .dcards{margin:0}
@@ -1029,10 +1044,10 @@ html.heroready .vname span:last-child,html.heroready .bigname span:last-child{ba
           <li class="dli2">what they <b class="dhope">hope</b> for<svg class="dm dstar" viewBox="-20 -20 40 40" aria-hidden="true"><path pathLength="1" d="M0,-13 L3.5,-4.5 L12.5,-4 L5.5,1.8 L7.8,10.5 L0,5.5 L-7.8,10.5 L-5.5,1.8 L-12.5,-4 L-3.5,-4.5 Z"/></svg></li>
           <li>and what holds them <b class="dback">back.<svg class="dm" viewBox="0 0 100 50" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M60,3 C85,2 98,14 96,26 C94,41 70,48 47,47 C22,46 3,38 4,24 C5,10 26,3 48,3 C58,3 66,5 72,8"/></svg></b></li>
         </ul>
-        <p>And I believe that behind every system and every strategy, there's a person with a story.</p>
       </div>
-      <div class="cap" style="--x:9010;--y:7;--w:380">
-        <p class="big">Real change begins in the conversations most people rush past, in the questions that unlock what's been buried.</p>
+
+      <div class="cap" style="--x:9010;--y:12;--w:380">
+        <p class="big">And I believe that behind every system and every strategy, <span class="mark">there's a person with a story.</span></p>
       </div>
 
       <!-- Travels -->
@@ -1291,6 +1306,12 @@ html.heroready .vname span:last-child,html.heroready .bigname span:last-child{ba
   <svg class="vnib" id="vnib" viewBox="-12 -40 24 44" aria-hidden="true"><g class="pen"><path d="M0,0 L-8,-27 Q0,-38 8,-27 Z"/><path class="slit" d="M0,-2 L0,-19"/></g><g class="pl" transform="translate(0,-18) scale(.32)"><path d="M36,0 Q33,-4.5 24,-4.5 L6,-4.5 L-9,-33 L-17,-33 L-7,-4.5 L-24,-4.5 L-31,-14 L-36,-14 L-32,-3 L-32,3 L-36,14 L-31,14 L-24,4.5 L-7,4.5 L-17,33 L-9,33 L6,4.5 L24,4.5 Q33,4.5 36,0 Z"/></g></svg>
 </main>
 
+<section class="dkey" id="dkey" aria-label="Real change begins" aria-hidden="true">
+  <svg class="dkline" id="dkline" aria-hidden="true"><path id="dkpath"/></svg>
+  <p class="dksay st t1">Real change begins in the conversations most people rush past,</p>
+  <svg class="vkey dkhole" id="dkhole" viewBox="0 0 80 120" aria-hidden="true"><rect class="plate" x="3" y="3" width="74" height="114" rx="30"/><path class="hole" d="M40,30 a14,14 0 1 1 -0.01,0 Z M33,52 L47,52 L52,90 L28,90 Z"/><g class="rays"><path d="M40,-14 v-10"/><path d="M76,2 l8,-8"/><path d="M4,2 l-8,-8"/></g></svg>
+  <p class="dkb st t3">in the questions that <span class="vunlock">unlock</span> what's been buried.</p>
+</section>
 <section class="dwork shut" id="dwork" aria-label="The Work" aria-hidden="true">
   <svg class="dwline" id="dwline" aria-hidden="true"><path id="dwpath"/></svg>
   <div class="dwgrid">
@@ -1621,7 +1642,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     origin = iw - 1000*kp;                       // world unit 1000 sits at the opening's right edge
     band.style.left=origin+"px"; if(!mobile) capsLayer.style.left=origin+"px";
     maxX=Math.max(0,(UNITS-1000)*kp);
-    XP=Math.max(0,Math.min(maxX,origin+WORK_U*kp-iw*0.985)); DW=Math.round(ih*1.0); PL=Math.round(ih*2.4);
+    XP=Math.max(0,Math.min(maxX,origin+WORK_U*kp-iw*0.985)); DW=Math.round(ih*1.7); PL=Math.round(ih*2.4);
     scroller.style.height=(maxX+DW+PL+ih)+"px";
     // the opening's line runs from the scribble to where the world's thread begins
     // line the scribble up with the centre of the sun (and the brushed name across it)
@@ -1639,7 +1660,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     if(iw/ih<1){hero.P1=[sx+iw*.08,sy];hero.P2=[iw*.92,ey];}
     for(const lw of lampWords){lw.w.style.transform="none";lw.ox=lw.w.offsetLeft;}
     for(const c of revealCaps) c.last=-1;
-    wbuilt=false; target=current=readScroll(); render();
+    wbuilt=false; kbuilt=false; target=current=readScroll(); render();
   }
   // the glide smooths the raw scroll; the world position and the interlude are both read from that smoothed value,
   // so the panel opens exactly when the world has arrived, never ahead of it
@@ -1649,7 +1670,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     else if(r<XP+DW){x=XP;wp=0;q=(r-XP)/DW;}                 // a reading stop: the world waits, the highlighter reads the last line with you
     else if(r<XP+DW+PL){x=XP;wp=(r-XP-DW)/PL;q=1;}
     else {x=r-DW-PL;wp=1;q=1;off=r-XP-DW-PL;}
-    dwell(q); setWork(wp,off); return Math.min(maxX,x);}
+    dwell(q,wp); setWork(wp,off); return Math.min(maxX,x);}
   /* ---------- The Work: drawn by scroll while the world waits ---------- */
   const WP=$("dwork"), wpath=$("dwpath"); let wL=1, wpLast=-1, wbuilt=false;
   function buildWork(){ if(!WP||mobile) return; const sm=a=>"M"+f(a[0])+smooth(a);
@@ -1658,23 +1679,46 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     const cr=R(WP.querySelector(".dcards")), y0=bandTop+520*kp;
     const a=[[-4,y0],[ai.left*0.5,ai.bottom+60],[ai.left-6,ai.bottom+6],[ai.right+4,ai.bottom+4],[ai.right+36,ai.bottom-20],[P[0][0]-50,P[0][1]-10],P[0]];
     let d=sm(a); P.slice(1).concat([P[0]]).forEach(q=>d+=" L"+f(q));
+    wpath.setAttribute("d",sm(a)); let acc=wpath.getTotalLength(); wDotL=[acc]; for(let k=1;k<P.length;k++){acc+=Math.hypot(P[k][0]-P[k-1][0],P[k][1]-P[k-1][1]); wDotL.push(acc);}
+    { const kh=$("dkhole"); if(kh){ const r=kh.getBoundingClientRect(); WP.style.setProperty("--ox",(r.left+r.width/2).toFixed(0)+"px"); WP.style.setProperty("--oy",(r.top+r.height*.4).toFixed(0)+"px"); } }
     const b=[P[0],[P[0][0]-16,dv.bottom+30],[dv.left+dv.width*.6,dv.bottom+44],[cr.left-20,cr.bottom+26],[cr.right+20,cr.bottom+30],[innerWidth+6,bandTop+548*kp]];
     d+=smooth(b); wpath.setAttribute("d",d); $("dwline").setAttribute("viewBox",`0 0 ${innerWidth} ${innerHeight}`);
     wL=wpath.getTotalLength(); wpath.style.strokeDasharray=wL+" "+wL; wpLast=-1; wbuilt=true; }
   // in: the panel spills open from the pen. out: it rides away to the left with the story, as if it were a page in the strip,
   // its line joining the world's thread at the edge; scrolling back brings it in the same way
-  const dwP=[...document.querySelectorAll(".cap p.big")].find(p=>/Real change begins/.test(p.textContent)); const dwW=[];
-  if(dwP){ const walk=n=>{[...n.childNodes].forEach(c=>{ if(c.nodeType===3){ const fr=document.createDocumentFragment(); c.nodeValue.split(/(\s+)/).forEach(t=>{ if(!t) return; if(/^\s+$/.test(t)){fr.appendChild(document.createTextNode(t));return;} const sp=document.createElement("span"); sp.className="dwl"; sp.textContent=t; fr.appendChild(sp); dwW.push(sp); }); c.replaceWith(fr);} else walk(c); });}; walk(dwP); }
-  let dwN=-1; function dwell(q){ const n=Math.round(Math.min(1,q*1.15)*dwW.length); if(n===dwN) return; dwN=n; dwW.forEach((w,i)=>w.classList.toggle("on",i<n)); }
+  // the white key scene: the thread arrives from the story, draws an old key, slides it into the keyhole, and the hole lights
+  let wDotL=[]; const wDots=[...document.querySelectorAll("#ddots circle")];
+  const DK=$("dkey"), kpath=$("dkpath"); let kL=1, kbuilt=false, kLast=-1;
+  function buildKey(){ if(!DK||mobile) return; let d="", cur=null; const ff=p=>p[0].toFixed(1)+","+p[1].toFixed(1);
+    const S=pts=>{pts=cur?[cur,...pts]:pts; if(!cur) d="M"+ff(pts[0]); d+=smooth(pts); cur=pts[pts.length-1];};
+    const L=pts=>{for(const p of pts) d+=" L"+ff(p); cur=pts[pts.length-1];}, MV=p=>{d+=" M"+ff(p); cur=p;};
+    const kh=$("dkhole").getBoundingClientRect(), cy=kh.top+kh.height*.32, kx=kh.left+kh.width/2, tip=kx+3, u=Math.max(1.4,kh.width/64);
+    const y0=bandTop+520*kp, br=24*u, ir=9*u, bx=Math.min(kh.left-360*u, kx-420*u)+br;
+    const nb=$("nib").getBoundingClientRect(), ns=[nb.left+nb.width/2,nb.top+nb.height/2], st=(ns[0]>0&&ns[0]<innerWidth&&ns[1]>0&&ns[1]<innerHeight)?ns:[-4,cy];
+    DK.style.setProperty("--ox",st[0].toFixed(0)+"px"); DK.style.setProperty("--oy",st[1].toFixed(0)+"px");
+    const lb=document.querySelector(".dkb").getBoundingClientRect(), ey=Math.min(innerHeight-70,Math.max(st[1],lb.bottom+34));   // stay below the second sentence
+    S([st,[st[0]-40,ey],[bx+br*3,ey],[bx-br*1.6,cy+br*1.9],[bx-br*1.6,cy+br*.1],[bx-br*.7,cy-br*.95],[bx,cy-br]]);
+    const ring=[];for(let k=1;k<=36;k++){const a=-Math.PI/2+k/32*Math.PI*2;ring.push([bx+Math.cos(a)*br,cy+Math.sin(a)*br]);} S(ring);
+    MV([bx+ir,cy]); const eye=[];for(let k=1;k<=33;k++){const a=k/32*Math.PI*2;eye.push([bx+Math.cos(a)*ir,cy+Math.sin(a)*ir]);} S(eye); MV([bx+br,cy]);
+    const c0=bx+br+6*u; L([[c0,cy],[c0,cy-7*u],[c0+5*u,cy-7*u],[c0+5*u,cy+7*u],[c0+10*u,cy+7*u],[c0+10*u,cy]]);
+    const b0=Math.min(tip-44*u,kh.left-36*u); L([[b0,cy],[b0,cy+18*u],[b0+9*u,cy+18*u],[b0+9*u,cy+9*u],[b0+16*u,cy+9*u],[b0+16*u,cy+18*u],[b0+25*u,cy+18*u],[b0+25*u,cy],[tip,cy]]);
+    L([[kx,cy+2],[kx,kh.top+kh.height*.68]]);
+    kpath.setAttribute("d",d); $("dkline").setAttribute("viewBox",`0 0 ${innerWidth} ${innerHeight}`);
+    kL=kpath.getTotalLength(); kpath.style.strokeDasharray=kL+" "+kL; kLast=-1; kbuilt=true; }
+  function dwell(q,wp){ if(!DK) return; if(!kbuilt&&q>0) buildKey(); const key=q+(wp||0)*10; if(Math.abs(key-kLast)<0.001) return; kLast=key;
+    const open=q>0.02&&(wp||0)<0.25; if(open&&!DK.classList.contains("open")){ kbuilt=false; buildKey(); } DK.classList.toggle("open",open); DK.setAttribute("aria-hidden",open?"false":"true");
+    DK.classList.toggle("k1",q>=0.08); DK.classList.toggle("k3",q>=0.62);
+    const dp=Math.max(0,Math.min(1,(q-0.1)/0.45)); kpath.style.strokeDashoffset=(kL*(1-dp)).toFixed(1);
+    $("dkhole").classList.toggle("lit",dp>=1); }
   let wOff=0;
   function setWork(p,off){ if(!WP) return; off=off||0; if(!wbuilt&&p>0) buildWork(); if(Math.abs(p-wpLast)<0.001&&Math.abs(off-wOff)<0.5) return; wpLast=p; wOff=off;
-    const open=p>0.012&&off<innerWidth+4, riding=off>0;
+    const open=p>0.03&&off<innerWidth+4, riding=off>0; if(open&&!WP.classList.contains("open")){ wbuilt=false; buildWork(); }
     WP.classList.toggle("ride",p>=1); WP.classList.toggle("open",open); WP.setAttribute("aria-hidden",open?"false":"true");
-    if(open) WP.classList.remove("shut"); else if(p<0.012) setTimeout(()=>{ if(!WP.classList.contains("open")) WP.classList.add("shut"); },900); else WP.classList.add("shut");
+    if(open) WP.classList.remove("shut"); else if(p<0.03) setTimeout(()=>{ if(!WP.classList.contains("open")) WP.classList.add("shut"); },900); else WP.classList.add("shut");
     WP.style.transform=riding?`translate3d(${(-off).toFixed(1)}px,0,0)`:"";
     WP.classList.toggle("s1",p>=0.1); WP.classList.toggle("s2",p>=0.28); WP.classList.toggle("s3",p>=0.5); WP.classList.toggle("s4",p>=0.6);
     const dp=Math.max(0,Math.min(1,(p-0.06)/0.7)); wpath.style.strokeDashoffset=(wL*(1-dp)).toFixed(1);
-    $("ddots").classList.toggle("lit",dp>0.6); $("dspark").classList.toggle("lit",dp>0.3); }
+    const drawn=wL*dp; wDots.forEach((c,k)=>c.classList.toggle("on",wDotL.length>k&&drawn>=wDotL[k]-1)); $("dspark").classList.toggle("lit",dp>0.3); }
   function goTo(u){
     let tx=u<0?0:Math.min(maxX, Math.max(0, origin + u*kp - iw*0.04)); if(PL&&!mobile&&tx>XP) tx+=DW+PL;
     window.scrollTo({top:scroller.offsetTop+tx, behavior:reduce?"auto":"smooth"});
@@ -1744,7 +1788,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
       bgNext.style.clipPath=`circle(${R.toFixed(1)}px at ${nibX.toFixed(1)}px ${nibY.toFixed(1)}px)`;
     }
     const useC=(ci>0&&t<0.45)?prevC:curC;
-    if(WP&&WP.classList.contains("open")&&wOff<1){ if(lastC!=="work"){setPalette({bg:P.ink,fg:P.paper,acc:P.yellow});lastC="work";} } else if(WP&&WP.classList.contains("open")){ if(lastC!==CH[6]){setPalette(CH[6]);lastC=CH[6];} bgBase.style.background=CH[6].bg; bgNext.style.clipPath="circle(0px at 0 0)"; } else if(useC!==lastC){setPalette(useC);lastC=useC;}
+    if(DK&&DK.classList.contains("open")&&!(WP&&WP.classList.contains("open"))){ if(lastC!=="key"){setPalette({bg:P.paper,fg:P.ink,acc:P.red});lastC="key";} } else if(WP&&WP.classList.contains("open")&&wOff<1){ if(lastC!=="work"){setPalette({bg:P.ink,fg:P.paper,acc:P.yellow});lastC="work";} } else if(WP&&WP.classList.contains("open")){ if(lastC!==CH[6]){setPalette(CH[6]);lastC=CH[6];} bgBase.style.background=CH[6].bg; bgNext.style.clipPath="circle(0px at 0 0)"; } else if(useC!==lastC){setPalette(useC);lastC=useC;}
 
     // only touch elements whose value actually changed (Safari re-rasterises the big SVG on every style write)
     for(const a of arts){const tt=clamp((tip-a.a)/(a.b-a.a)); const v=a.fade?(tt*a.max).toFixed(3):(1-tt).toFixed(3); if(a._v===v) continue; a._v=v; if(a.fade) a.e.style.opacity=v; else a.e.style.strokeDashoffset=v;}
