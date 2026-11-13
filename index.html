@@ -329,8 +329,10 @@ html:not(.heroready) .vday,html:not(.heroready) .intro .day{animation:none;opaci
 .dcards .lid{width:210px;flex:none;margin:38px 0 0 -30px;transform:rotate(3deg)}
 .dcards .lid .lban{height:44px}.dcards .lid .lav{width:58px;height:58px;margin-top:-30px}.dcards .lid .lin{top:52px;width:24px;height:24px}
 .dcards .lid .lname{font-size:15px}.dcards .lid .lhead{font-size:11.5px}.dcards .lid .lloc{font-size:10.5px}.dcards .lid .lbtn{min-height:26px;font-size:12px;padding:0 12px}
-.dwl{background:linear-gradient(var(--yellow),var(--yellow)) 0 88%/0% 40% no-repeat;transition:background-size .3s ease-out;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.dwl.on{background-size:100% 40%}
+/* the reading stop: words ink in, one by one, as you scroll, like the pen writing them; each stays fully readable once inked */
+.dwl{display:inline-block;opacity:.34;transform:translateY(.12em);filter:blur(.6px);transition:opacity .35s ease-out,transform .45s cubic-bezier(.2,.7,.1,1),filter .35s}
+.dwl.on{opacity:1;transform:none;filter:none}
+@media (prefers-reduced-motion:reduce){.dwl{opacity:1;transform:none;filter:none;transition:none}}
 /* ===================== desktop: The Work, an interlude that opens over the story while the scroll pauses ===================== */
 .dwork{position:fixed;inset:0;z-index:4;background:#0A090B;color:#F3F3F3;--bg:#0A090B;--fg:#F3F3F3;--acc:#FCDF03;--sbg:#0A090B;--sfg:#F3F3F3;--sacc:#FCDF03;clip-path:circle(0px at 62% 60%);transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s .85s;pointer-events:none;visibility:hidden}
 .dwork.open{clip-path:circle(150% at 62% 60%);pointer-events:auto;visibility:visible;transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s}
