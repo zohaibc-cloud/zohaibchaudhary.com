@@ -329,6 +329,8 @@ html:not(.heroready) .vday,html:not(.heroready) .intro .day{animation:none;opaci
 .dcards .lid{width:210px;flex:none;margin:38px 0 0 -30px;transform:rotate(3deg)}
 .dcards .lid .lban{height:44px}.dcards .lid .lav{width:58px;height:58px;margin-top:-30px}.dcards .lid .lin{top:52px;width:24px;height:24px}
 .dcards .lid .lname{font-size:15px}.dcards .lid .lhead{font-size:11.5px}.dcards .lid .lloc{font-size:10.5px}.dcards .lid .lbtn{min-height:26px;font-size:12px;padding:0 12px}
+.dwl{background:linear-gradient(var(--yellow),var(--yellow)) 0 88%/0% 40% no-repeat;transition:background-size .3s ease-out;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.dwl.on{background-size:100% 40%}
 /* ===================== desktop: The Work, an interlude that opens over the story while the scroll pauses ===================== */
 .dwork{position:fixed;inset:0;z-index:4;background:#0A090B;color:#F3F3F3;--bg:#0A090B;--fg:#F3F3F3;--acc:#FCDF03;--sbg:#0A090B;--sfg:#F3F3F3;--sacc:#FCDF03;clip-path:circle(0px at 62% 60%);transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s .85s;pointer-events:none;visibility:hidden}
 .dwork.open{clip-path:circle(150% at 62% 60%);pointer-events:auto;visibility:visible;transition:clip-path .85s cubic-bezier(.65,0,.25,1),visibility 0s}
@@ -1556,7 +1558,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   const nav=$("chapters");
   const btns=CH.map(c=>{const b=document.createElement("button");b.type="button";b.textContent=c.n;b.addEventListener("click",()=>goTo(c.x));nav.appendChild(b);return b;});
   const wbtn=document.createElement("button"); wbtn.type="button"; wbtn.textContent="Work"; nav.insertBefore(wbtn,btns[6]);
-  wbtn.addEventListener("click",()=>window.scrollTo({top:scroller.offsetTop+XP+PL*0.66,behavior:reduce?"auto":"smooth"}));
+  wbtn.addEventListener("click",()=>window.scrollTo({top:scroller.offsetTop+XP+DW+PL*0.66,behavior:reduce?"auto":"smooth"}));
   const caps=[...document.querySelectorAll(".cap:not(.deco)")].map(c=>({e:c,x:parseFloat(c.style.getPropertyValue("--x"))}));
 
   let hero=null;
@@ -1601,7 +1603,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   function kickScribble(){ if(reduce){sc.k=sc.target;drawHero();return;} if(!sc.running){sc.running=true;sc.last=0;requestAnimationFrame(scLoop);} }
   document.addEventListener("visibilitychange",()=>{if(!document.hidden&&current<iw) kickScribble();});
 
-  let pw=1000, kp=1, iw=innerWidth, ih=innerHeight, maxX=0, mobile=false, origin=0, bandTop=0, XP=0, PL=0;
+  let pw=1000, kp=1, iw=innerWidth, ih=innerHeight, maxX=0, mobile=false, origin=0, bandTop=0, XP=0, PL=0, DW=0;
   const WORK_U=9405;   // the pause lands with "Real change begins" in view and Travels still just off screen
   const NAVH=52;
   function layout(){
@@ -1617,8 +1619,8 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     origin = iw - 1000*kp;                       // world unit 1000 sits at the opening's right edge
     band.style.left=origin+"px"; if(!mobile) capsLayer.style.left=origin+"px";
     maxX=Math.max(0,(UNITS-1000)*kp);
-    XP=Math.max(0,Math.min(maxX,origin+WORK_U*kp-iw*0.985)); PL=Math.round(ih*2.4);
-    scroller.style.height=(maxX+PL+ih)+"px";
+    XP=Math.max(0,Math.min(maxX,origin+WORK_U*kp-iw*0.985)); DW=Math.round(ih*1.0); PL=Math.round(ih*2.4);
+    scroller.style.height=(maxX+DW+PL+ih)+"px";
     // the opening's line runs from the scribble to where the world's thread begins
     // line the scribble up with the centre of the sun (and the brushed name across it)
     const tall=iw/ih<1;
@@ -1641,7 +1643,11 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   // so the panel opens exactly when the world has arrived, never ahead of it
   function readScroll(){return Math.max(0, window.scrollY - scroller.offsetTop);}
   let curX=0;
-  function mapX(r){let x,wp,off=0; if(mobile||!PL||r<=XP){x=r;wp=0;} else if(r<XP+PL){x=XP;wp=(r-XP)/PL;} else {x=r-PL;wp=1;off=r-XP-PL;} setWork(wp,off); return Math.min(maxX,x);}
+  function mapX(r){let x,wp,off=0,q=0; if(mobile||!PL||r<=XP){x=r;wp=0;q=0;}
+    else if(r<XP+DW){x=XP;wp=0;q=(r-XP)/DW;}                 // a reading stop: the world waits, the highlighter reads the last line with you
+    else if(r<XP+DW+PL){x=XP;wp=(r-XP-DW)/PL;q=1;}
+    else {x=r-DW-PL;wp=1;q=1;off=r-XP-DW-PL;}
+    dwell(q); setWork(wp,off); return Math.min(maxX,x);}
   /* ---------- The Work: drawn by scroll while the world waits ---------- */
   const WP=$("dwork"), wpath=$("dwpath"); let wL=1, wpLast=-1, wbuilt=false;
   function buildWork(){ if(!WP||mobile) return; const sm=a=>"M"+f(a[0])+smooth(a);
@@ -1655,6 +1661,9 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     wL=wpath.getTotalLength(); wpath.style.strokeDasharray=wL+" "+wL; wpLast=-1; wbuilt=true; }
   // in: the panel spills open from the pen. out: it rides away to the left with the story, as if it were a page in the strip,
   // its line joining the world's thread at the edge; scrolling back brings it in the same way
+  const dwP=[...document.querySelectorAll(".cap p.big")].find(p=>/Real change begins/.test(p.textContent)); const dwW=[];
+  if(dwP){ const walk=n=>{[...n.childNodes].forEach(c=>{ if(c.nodeType===3){ const fr=document.createDocumentFragment(); c.nodeValue.split(/(\s+)/).forEach(t=>{ if(!t) return; if(/^\s+$/.test(t)){fr.appendChild(document.createTextNode(t));return;} const sp=document.createElement("span"); sp.className="dwl"; sp.textContent=t; fr.appendChild(sp); dwW.push(sp); }); c.replaceWith(fr);} else walk(c); });}; walk(dwP); }
+  let dwN=-1; function dwell(q){ const n=Math.round(Math.min(1,q*1.15)*dwW.length); if(n===dwN) return; dwN=n; dwW.forEach((w,i)=>w.classList.toggle("on",i<n)); }
   let wOff=0;
   function setWork(p,off){ if(!WP) return; off=off||0; if(!wbuilt&&p>0) buildWork(); if(Math.abs(p-wpLast)<0.001&&Math.abs(off-wOff)<0.5) return; wpLast=p; wOff=off;
     const open=p>0.012&&off<innerWidth+4, riding=off>0;
@@ -1665,7 +1674,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     const dp=Math.max(0,Math.min(1,(p-0.06)/0.7)); wpath.style.strokeDashoffset=(wL*(1-dp)).toFixed(1);
     $("ddots").classList.toggle("lit",dp>0.6); $("dspark").classList.toggle("lit",dp>0.3); }
   function goTo(u){
-    let tx=u<0?0:Math.min(maxX, Math.max(0, origin + u*kp - iw*0.04)); if(PL&&!mobile&&tx>XP) tx+=PL;
+    let tx=u<0?0:Math.min(maxX, Math.max(0, origin + u*kp - iw*0.04)); if(PL&&!mobile&&tx>XP) tx+=DW+PL;
     window.scrollTo({top:scroller.offsetTop+tx, behavior:reduce?"auto":"smooth"});
   }
   (function(){
