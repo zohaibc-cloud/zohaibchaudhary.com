@@ -239,6 +239,11 @@ html.heroready .vday .xl,html.heroready .day .xl{background-size:100% 46%;transi
 .vday .xl,.day .xl{font:inherit;letter-spacing:0;text-transform:none;font-style:italic}
 .vreal{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin:-4px 0 0}
 .mlinks{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.mail .xl{background:var(--yellow)!important;color:#0A090B!important;border-radius:999px;padding:.7em 1.15em;margin:0;font:600 12px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;display:inline-flex;align-items:center;gap:.35em;transition:transform .2s,box-shadow .2s}
+.mail .xl:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(252,223,3,.25)}
+.mail .xl .fsstar,.reply .mail .xl .fsstar{fill:#0A090B;vertical-align:.35em}
+.mail .xl:focus-visible{outline:2px solid var(--yellow);outline-offset:3px}
+.mail .mlinks{gap:10px}
 /* The Work: moments, scattered decisions the thread joins, and gates that open to a steady cadence */
 .vwork .vmoments{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px;font-family:var(--f-display);font-weight:600;font-size:clamp(22px,6.4vw,30px);letter-spacing:-.02em;line-height:1.15}
 .vwork .vmoments li:nth-child(2){transition-delay:.12s}.vwork .vmoments li:nth-child(3){transition-delay:.24s}.vwork .vmoments li:nth-child(4){transition-delay:.36s}
