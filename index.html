@@ -145,6 +145,9 @@ body{font-family:var(--f-text);overflow-x:hidden}
 .reply .quip:first-child{color:var(--yellow)}
 .mail{display:grid;gap:calc(var(--ts) * .006);margin-top:calc(var(--ts) * .006);animation:mailin .6s cubic-bezier(.2,.7,.1,1) both}
 @keyframes mailin{from{opacity:0;transform:translateY(.6em)}}
+.qw{display:inline-block;opacity:0;transform:translateY(.45em);filter:blur(3px);animation:qwin .5s cubic-bezier(.2,.7,.1,1) forwards}
+@keyframes qwin{to{opacity:1;transform:none;filter:none}}
+@media (prefers-reduced-motion:reduce){.qw{animation:none;opacity:1;transform:none;filter:none}}
 .mail .mlabel{font-family:var(--f-mono);font-size:max(11px,calc(var(--ts) * .0098));letter-spacing:.12em;text-transform:uppercase;opacity:.75}
 .mail .addr{font-family:var(--f-display);font-weight:600;font-size:calc(var(--ts) * .026);letter-spacing:-.01em;color:var(--yellow);user-select:all;white-space:nowrap}
 .mbtns{display:flex;gap:10px;flex-wrap:wrap}
@@ -1736,14 +1739,14 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     const btn=$("connect"), reply=$("reply"), q1=$("q1"), q2=$("q2"), mailRow=$("mailRow"), copyBtn=$("copyMail"), addr=$("addr");
     const lines=["Bahaha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
     let played=false;
-    const type=(el,txt,ms)=>new Promise(res=>{if(reduce){el.textContent=txt;return res();}let i=0;const t=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length){clearInterval(t);res();}},ms);});
+    const type=(el,txt,ms)=>{el.textContent="";if(reduce){el.textContent=txt;return Promise.resolve();}const w=txt.split(" ");w.forEach((x,i)=>{const s=document.createElement("span");s.className="qw";s.style.animationDelay=(i*ms)+"ms";s.textContent=x;el.appendChild(s);if(i<w.length-1)el.appendChild(document.createTextNode(" "));});return new Promise(r=>setTimeout(r,Math.min(w.length*ms,250)));};
     const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
     btn.addEventListener("click",async()=>{
       reply.hidden=false; btn.setAttribute("aria-expanded","true");
       if(played) return; played=true;
       btn.textContent="Let's connect…";
-      await type(q1,lines[0],28); await wait(650);
-      await type(q2,lines[1],22); await wait(550);
+      await type(q1,lines[0],30); await wait(120);
+      await type(q2,lines[1],22); await wait(260);
       mailRow.hidden=false; btn.textContent="Say salaam";
       btn.addEventListener("click",()=>{const r=document.createRange();r.selectNodeContents(addr);const s=getSelection();s.removeAllRanges();s.addRange(r);},{once:false});
     });
@@ -2316,15 +2319,15 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   const btn=$("vconnect"), reply=$("vreply"), q1=$("vq1"), q2=$("vq2"), mailRow=$("vmailRow"), copyBtn=$("vcopy"), addr=$("vaddr");
   const lines=["Bahaha. Nice try. You don't have my number.","That's reserved for three people who call me Baba, and one very patient EBITDA model."];
   let played=false;
-  const type=(el,txt,ms)=>new Promise(res=>{if(reduce){el.textContent=txt;return res();}let i=0;const t=setInterval(()=>{el.textContent=txt.slice(0,++i);if(i>=txt.length){clearInterval(t);res();}},ms);});
+  const type=(el,txt,ms)=>{el.textContent="";if(reduce){el.textContent=txt;return Promise.resolve();}const w=txt.split(" ");w.forEach((x,i)=>{const s=document.createElement("span");s.className="qw";s.style.animationDelay=(i*ms)+"ms";s.textContent=x;el.appendChild(s);if(i<w.length-1)el.appendChild(document.createTextNode(" "));});return new Promise(r=>setTimeout(r,Math.min(w.length*ms,250)));};
   const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
   // the reply opens as a sheet that grows out of the seal, and folds back into it
   const sheet=$("vsheet"), closeBtn=$("vclose"); let typing=null;
   function origin(){const b=btn.getBoundingClientRect(); sheet.style.setProperty("--ox",(b.left+b.width/2)+"px"); sheet.style.setProperty("--oy",(b.top+b.height/2)+"px");}
   async function play(){
     if(played) return; played=true;
-    await wait(500); await type(q1,lines[0],26); await wait(500);
-    await type(q2,lines[1],20); await wait(350);
+    await wait(300); await type(q1,lines[0],30); await wait(120);
+    await type(q2,lines[1],22); await wait(260);
     mailRow.hidden=false; const tp=document.getElementById("vsealtxt"); if(tp){tp.textContent="SAY SALAAM ✦ SAY SALAAM ✦ ";fitSeal();}
     btn.setAttribute("aria-label","Say salaam, open my email"); btn.classList.add("open");
   }
