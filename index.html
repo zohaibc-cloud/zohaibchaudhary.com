@@ -1484,8 +1484,8 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   });
 
   /* ---------- snapshots ---------- */
-  const SNAP=[["img/p_ride.jpg","200 km. Conquered.","Ride to Conquer Cancer"],["img/p_jet.jpg","In the GCAP cockpit","Farnborough Airshow 2026"],["img/p_miami.jpg","Miami, after dark","under the palm lights"],["img/p_ronnie.jpg","With Ronnie Coleman","8× Mr. Olympia"],
-    ["img/p_jay.jpg","With Jay Cutler","4× Mr. Olympia"],["img/p_bw.jpg","Bundeswehr display","Germany"]];
+  const SNAP=[["img/p_ride.jpg","200 km. Conquered.","Ride to Conquer Cancer"],["img/p_jet.jpg","In the GCAP cockpit","Farnborough Airshow 2026"],["img/p_miami.jpg","Miami, after dark","under the palm lights"],
+    ["img/p_jay.jpg","With Jay Cutler","4× Mr. Olympia"],["img/p_ronnie.jpg","With Ronnie Coleman","8× Mr. Olympia"],["img/p_bw.jpg","Bundeswehr display","Germany"]];
   const galleryG=$("gallery");
   SNAP.forEach(([src,l1,l2],i)=>{
     const x=12975+i*238, y=i%2?96:30, rot=[-2,2.5,-2.5,2,-1.5,2.5,-2][i];
@@ -1918,7 +1918,8 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
     hobBox.appendChild(d);
   });
   const rowA=$("vrow1"), rowB=$("vrow2");
-  TT.SNAP.forEach(([src,l1,l2],i)=>{
+  /* phone rows slide past each other, so the three blue-shirt photos (jet, Jay, Bundeswehr) are split (one in the top row, two apart in the bottom row) so they never sit side by side */
+  [0,2,1,3,4,5].map(k=>TT.SNAP[k]).forEach(([src,l1,l2],i)=>{
     const f=document.createElement("figure"); f.className="vprint"; f.style.setProperty("--r",[-2,2.5,-2.5,2,-1.5,2.5,-2][i%7]+"deg");
     f.innerHTML=`<img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="><figcaption><b></b>${l2?"<i></i>":""}</figcaption>`;
     f.querySelector("img").dataset.later=src; f.querySelector("img").alt=l1; f.querySelector("b").textContent=l1; if(l2) f.querySelector("i").textContent=l2;
