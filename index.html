@@ -170,6 +170,9 @@ body{font-family:var(--f-text);overflow-x:hidden}
 .snap-sub{font-family:var(--f-mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;fill:#55545A}
 .stamp text{font-family:var(--f-mono);letter-spacing:.12em;text-transform:uppercase}
 .stamp .greet{font-family:var(--f-text);font-style:italic;letter-spacing:0;text-transform:none}
+.stamp.sb *{transition:stroke .45s,fill .45s}
+.bgblue .stamp.sb [stroke]{stroke:#0A090B}
+.bgblue .stamp.sb text{fill:#0A090B}
 .quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--ts) * .022)}
 .q{border:2px dashed var(--fg);padding:calc(var(--ts) * .018);display:grid;gap:calc(var(--ts) * .008);min-height:calc(var(--ts) * .16);align-content:start}
 .q:nth-child(1){transform:rotate(-1.5deg)} .q:nth-child(2){transform:rotate(1deg);border-color:var(--red)} .q:nth-child(3){transform:rotate(-.6deg);border-color:var(--blue)}
@@ -1504,7 +1507,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   const stamps=[];
   PLACES.forEach(([name,greet,cont,col,shape],i)=>{
     const cx=9990+i*81, cy=i%2?470:185, rot=((i*37)%17)-8;
-    const g=document.createElementNS(NS,"g");g.setAttribute("class","stamp");g.style.opacity=0;artG.appendChild(g);
+    const g=document.createElementNS(NS,"g");g.setAttribute("class",col===P.blue?"stamp sb":"stamp");g.style.opacity=0;artG.appendChild(g);
     const add=(tag,at)=>{const e=document.createElementNS(NS,tag);for(const k in at)e.setAttribute(k,at[k]);g.appendChild(e);return e;};
     const st={fill:"none",stroke:col,"stroke-width":3};
     if(shape==="circle"){add("circle",{...st,r:72});add("circle",{...st,r:62,"stroke-width":1.5});}
@@ -1760,7 +1763,7 @@ window.__setChrome=function(bg,fg,acc){ const de=document.documentElement; if(!b
   const clamp=v=>Math.min(1,Math.max(0,v));
   const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
   let lastC=null;
-  function setPalette(c){for(const el of [stage,root]){el.style.setProperty("--bg",c.bg);el.style.setProperty("--fg",c.fg);el.style.setProperty("--acc",c.acc);} if(window.__setChrome) window.__setChrome(c.bg,c.fg,c.acc);}
+  function setPalette(c){document.documentElement.classList.toggle("bgblue",c.bg===P.blue);for(const el of [stage,root]){el.style.setProperty("--bg",c.bg);el.style.setProperty("--fg",c.fg);el.style.setProperty("--acc",c.acc);} if(window.__setChrome) window.__setChrome(c.bg,c.fg,c.acc);}
 
   function render(){
     const x=curX=mapX(current), prog=maxX?x/maxX:1;
