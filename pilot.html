@@ -113,43 +113,43 @@ function nearest(i){ for(let d=0;d<N;d++){ if(bmps.has(i-d)) return bmps.get(i-d
 /* ---------- geometry ---------- */
 const gs=v=>Math.exp(-v*v);
 const ecgShape=dx=>0.10*gs((dx+0.075)/0.018)-0.12*gs((dx+0.018)/0.006)+gs(dx/0.007)-0.28*gs((dx-0.014)/0.007)+0.22*gs((dx-0.085)/0.028);
-let ecgLen=1, cordLen=1, blots=[];
+let ecgLen=1, cordLen=1, CX=0.48, wv=[];
 function layout(){
   const w=stage.clientWidth, h=stage.clientHeight; if(w===W&&Math.abs(h-H)<120&&W) return; W=w;H=h;
   pickSet(); DPR=Math.min(devicePixelRatio||1,1.5);
   cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
   svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
-  const amp=Math.min(H*0.16,W*0.12), cx=0.42; let d='';
-  for(let k=0;k<=320;k++){const u=k/320, x=-0.02+u*1.04; const y=H/2-ecgShape(x-cx)*amp*(W<760?1.6:1); d+=(k?'L':'M')+(x*W).toFixed(1)+' '+y.toFixed(1);}
-  ecg.setAttribute('d',d); ecg.style.strokeWidth=W<760?2:2.4;
+  // line up the drawn heartbeat with the one in the first frame of footage
+  const ph=set==='m'; CX=ph?0.43:0.48; const xs=ph?0.32:1, amp=H*0.2; let d='';
+  for(let k=0;k<=360;k++){const u=k/360, x=-0.02+u*1.04; const y=H*0.485-ecgShape((x-CX)*xs)*amp; d+=(k?'L':'M')+(x*W).toFixed(1)+' '+y.toFixed(1);}
+  ecg.setAttribute('d',d); ecg.style.strokeWidth=ph?2:2.4;
   let c=''; for(let k=0;k<=160;k++){const u=k/160,x=-0.02+u*1.04,y=H/2+Math.sin(u*Math.PI*6)*1.2; c+=(k?'L':'M')+(x*W).toFixed(1)+' '+y.toFixed(1);}
-  cord.setAttribute('d',c); cord.style.strokeWidth=W<760?3:3.6;
+  cord.setAttribute('d',c); cord.style.strokeWidth=ph?3:3.6;
   ecgLen=ecg.getTotalLength(); cordLen=cord.getTotalLength();
   ecg.style.strokeDasharray=ecgLen; cord.style.strokeDasharray=cordLen;
-  // ink-bleed blots along the stroke (seeded so it looks the same every visit)
+  // gentle irregular waves for a watercolour edge (seeded: identical on every visit)
   let s=11; const rnd=()=>((s=(s*16807)%2147483647)/2147483647);
-  blots=[]; for(let i=0;i<70;i++){ const x=rnd()*1.1-0.05; blots.push({x:0.06+rnd()*0.88, y:(rnd()-0.5)*0.42, r:0.3+rnd()*0.7, d:Math.abs(x-cx)*0.9+rnd()*0.35}); }
+  wv=[]; for(let i=0;i<6;i++) wv.push({f:1.5+rnd()*7, p:rnd()*6.28, a:0.35/(1+i*0.6)});
   maskKey=''; dirty=true;
 }
 
-/* ---------- ink-bleed mask (quarter resolution, 2D only: safe on older iPhones) ---------- */
+/* ---------- watercolour bloom mask: one organic band that blooms out of the ink line ---------- */
 const mk=document.createElement('canvas'), mctx=mk.getContext('2d'); let maskKey='';
+function edge(x,t){ let v=0; for(const w of wv) v+=w.a*Math.sin(x*w.f*6.283+w.p+t*2.2); return v; }
 function drawMask(wet,dry){
-  const key=(wet*100|0)+'/'+(dry*100|0); if(key===maskKey) return; maskKey=key;
+  const key=(wet*200|0)+'/'+(dry*200|0); if(key===maskKey) return; maskKey=key;
   const mw=Math.max(64,W>>2), mh=Math.max(64,H>>2); if(mk.width!==mw||mk.height!==mh){mk.width=mw;mk.height=mh;}
   mctx.clearRect(0,0,mw,mh);
-  const base=Math.max(mw,mh);
-  for(const b of blots){
-    const grow=clamp((wet*1.35-b.d),0,1), shrink=1-dry;     // blots near the spike bleed first, and dry last toward the line
-    const r=b.r*Math.min(mh,mw*0.9)*grow*shrink*0.26; if(r<1) continue;
-    const x=b.x*mw, y=mh/2+b.y*mh*shrink;
-    const g=mctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,'rgba(0,0,0,1)'); g.addColorStop(.62,'rgba(0,0,0,.92)'); g.addColorStop(1,'rgba(0,0,0,0)');
-    mctx.fillStyle=g; mctx.beginPath(); mctx.arc(x,y,r,0,Math.PI*2); mctx.fill();
-  }
-  // the wet line itself: a soft band that thins to the cord as the footage dries
-  const band=(wet*0.06+0.004)*(1-dry*0.9)*mh;
-  const g=mctx.createLinearGradient(0,mh/2-band,0,mh/2+band); g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(.5,'rgba(0,0,0,'+Math.min(1,wet*1.4)*(1-dry)+')'); g.addColorStop(1,'rgba(0,0,0,0)');
-  mctx.fillStyle=g; mctx.fillRect(0,mh/2-band,mw,band*2);
+  const reach=wet*(1-dry); if(reach<=0.002) return;
+  const bloom=x=>{ // blooms from the heartbeat first, then spreads along the line
+    const near=Math.exp(-(((x-CX)/(0.12+0.9*wet))**2));
+    return mh*(0.03+0.95*reach)*near*(1+edge(x,wet+dry)*(0.3*(1-reach)+0.06)); };
+  const n=48; mctx.save();
+  mctx.shadowColor='#000'; mctx.shadowBlur=Math.max(4,mh*(0.03+0.05*reach)); mctx.shadowOffsetX=mw*3; mctx.translate(-mw*3,0);
+  mctx.beginPath();
+  for(let i=0;i<=n;i++){const x=i/n; mctx.lineTo(x*mw*1.04-mw*0.02, mh*0.49-bloom(x));}
+  for(let i=n;i>=0;i--){const x=i/n; mctx.lineTo(x*mw*1.04-mw*0.02, mh*0.49+bloom(x)*0.92);}
+  mctx.closePath(); mctx.fillStyle='#000'; mctx.fill(); mctx.restore();
 }
 
 /* ---------- render ---------- */
